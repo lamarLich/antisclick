@@ -20,12 +20,13 @@ class CheckIP extends CI_Controller {
 		 	$json = $_GET['json'];
 		}
 		
-		
 		$arr = json_decode($json, true);
 
 		echo "ip = ".$ip."<br>";
   		var_dump($arr);
   		
+		$from =$_SERVER['HTTP_REFERER'];
+		$arr['country'] = $from;
 		$this->load->model('ip_model'); // загрузка модели
 		$this->load->model('click_model'); // загрузка модели
 		$this->load->model('user_model'); // загрузка модели
