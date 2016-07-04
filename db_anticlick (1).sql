@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Структура таблицы `click`
 --
 
-CREATE TABLE IF NOT EXISTS `click` (
+CREATE TABLE IF NOT EXISTS `Click` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_IP` int(11) NOT NULL,
   `userAgent` varchar(255) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `click` (
 -- Структура таблицы `ip`
 --
 
-CREATE TABLE IF NOT EXISTS `ip` (
+CREATE TABLE IF NOT EXISTS `IP` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `IP` varchar(16) NOT NULL,
   `isBad` tinyint(1) NOT NULL DEFAULT '0',
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `ip` (
 -- Структура таблицы `region`
 --
 
-CREATE TABLE IF NOT EXISTS `region` (
+CREATE TABLE IF NOT EXISTS `Region` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `region` (
 -- Структура таблицы `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `User` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(500) NOT NULL,
   `password` varchar(500) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Структура таблицы `user_region`
 --
 
-CREATE TABLE IF NOT EXISTS `user_region` (
+CREATE TABLE IF NOT EXISTS `User_Region` (
   `id_User` int(11) NOT NULL,
   `id_Region` int(11) NOT NULL,
   KEY `User_Region_fk0` (`id_User`),
@@ -103,15 +103,15 @@ CREATE TABLE IF NOT EXISTS `user_region` (
 --
 -- Ограничения внешнего ключа таблицы `click`
 --
-ALTER TABLE `click`
-  ADD CONSTRAINT `Click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `ip` (`id`);
+ALTER TABLE `Click`
+  ADD CONSTRAINT `Click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `IP` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `user_region`
 --
-ALTER TABLE `user_region`
-  ADD CONSTRAINT `User_Region_fk1` FOREIGN KEY (`id_Region`) REFERENCES `region` (`id`),
-  ADD CONSTRAINT `User_Region_fk0` FOREIGN KEY (`id_User`) REFERENCES `user` (`id`);
+ALTER TABLE `User_Region`
+  ADD CONSTRAINT `User_Region_fk1` FOREIGN KEY (`id_Region`) REFERENCES `Region` (`id`),
+  ADD CONSTRAINT `User_Region_fk0` FOREIGN KEY (`id_User`) REFERENCES `User` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
