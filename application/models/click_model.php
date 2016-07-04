@@ -16,16 +16,6 @@ class Click_model extends CI_Model {
 
 	function insert_click($arr)
 	{
-		/*$this->$id_ip=			$arr['id_ip'];
-		$this->$userAgent=		$arr['userAgent'];
-		$this->$width_screen=	$arr['width_screen'];
-		$this->$height_screen=	$arr['height_screen'];
-		$this->$city=			$arr['city'];
-		$this->$region=			$arr['region'];
-		$this->$country=		$arr['country'];
-		$this->$platform=		$arr['platform'];
-		$this->$time_in=		$arr['time'];
-		*/
 		$data['id_IP']=			$arr['id_ip'];
 		$data['userAgent']=		$arr['userAgent'];
 		$data['width_screen']=	$arr['width'];
@@ -34,12 +24,23 @@ class Click_model extends CI_Model {
 		$data['region']=		$arr['region'];
 		$data['country']=		$arr['country'];
 		$data['platform']=		$arr['platform'];
-		$data['time_in']=		time();
+		$data['time_in']=		date('Y-m-d H:i:s',time());
 		
         $this->db->insert('Click', $data);
         $idClick=$this->db->insert_id();
         $this->session->set_userdata('id_Click', $idClick);
         return $idClick;
+	}
+	function GetClick()
+	{
+		$idClick=	$this->session->userdata('id_Click');
+		$qGetQuery = "SELECT * FROM Click WHERE id = ?;";
+		$res = $this->db->query($qGetQuery,array($idClick));
+		$data = $res->result_array();
+		if (count($data) == 0) {
+			return array();
+		}
+		return $data[0];
 	}
 
 	function IsFirstClick($ip)
@@ -48,10 +49,8 @@ class Click_model extends CI_Model {
 		$res = $this->db->query($qGetQuery,array($ip));
 		$data = $res->result_array();
 		if (count($data) < 2) {
-			echo "true";
 			return true;
 		}
-			echo "false";
 		return false;
 	}
 
@@ -79,12 +78,17 @@ class Click_model extends CI_Model {
 
 	function AddTimeOut($time_out)
 	{
+	 	$idClick=	$this->session->userdata('id_Click');
+		if (!isset($idClick)) {
+			echo "empty session";
+		}
 		$data = array(
                'time_out' => $time_out
-            );
-	 $idClick=	$this->session->userdata('id_Click');
+        );
 		$this->db->where('id', $idClick);
 		$this->db->update('Click', $data);
+		$this->session->unset_userdata('id_Click');
+
 	}
 	
 	

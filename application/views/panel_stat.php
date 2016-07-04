@@ -32,7 +32,8 @@ td {
 			<td><?=$item['region'];?>		</td> 
 			<td><?=$item['country'];?>		</td> 
 			<td><?=$item['platform'];?>		</td> 
-			<td><?=$item['time'];?>			</td>
+			<td><?=$item['time_in'];?>		</td>
+			<td><?=$item['time_out'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>
@@ -48,7 +49,8 @@ td {
 			<td><?=$item['region'];?>		</td> 
 			<td><?=$item['country'];?>		</td> 
 			<td><?=$item['platform'];?>		</td> 
-			<td><?=$item['time'];?>			</td>
+			<td><?=$item['time_in'];?>		</td>
+			<td><?=$item['time_out'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>
@@ -64,7 +66,8 @@ td {
 			<td><?=$item['region'];?>		</td> 
 			<td><?=$item['country'];?>		</td> 
 			<td><?=$item['platform'];?>		</td> 
-			<td><?=$item['time'];?>			</td>
+			<td><?=$item['time_in'];?>		</td>
+			<td><?=$item['time_out'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>

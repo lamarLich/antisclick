@@ -43,11 +43,11 @@ class CheckIP extends CI_Controller {
 
 		$ip=$_SERVER['REMOTE_ADDR'];
 		
-		/*//////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////
 		$this->load->model('ip_model'); // загрузка модели
 		$this->load->model('click_model'); // загрузка модели
 		$this->load->model('user_model'); // загрузка модели
-/*
+		/*//
 		$idIP=$this->ip_model->insert_ip($ip);
 		echo "<br> insert IP = ".$idIP;
 		$arr['id_ip'] = $idIP;
@@ -56,19 +56,18 @@ class CheckIP extends CI_Controller {
 		//echo "<br> insert Click = ".$idClick;
 		echo "<br> lastVisit Click = "; 
 		var_dump($this->click_model->GetTimeLastVisit($ip));
-		//
-		
-		$date = date('Y-m-d H:i:s');//////////// TIMESTAMP
+		//*/
 
 		//$id_user =	$arr['region'];
+		$arr = $this->click_model->GetClick();
 		$points=0;
 		$ourRegion= "Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
 		$clientRegion= $arr['region'];
 		$isFirstClick= $this->click_model->IsFirstClick($ip); 
-		echo "<br> isFirstClick = ".$isFirstClick;
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
 		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
-		$timeOnSiteInSec = time()-$this->click_model->GetTimeLastVisit($ip);
+		$oldtime=$this->click_model->GetTimeLastVisit($ip);
+		$timeOnSiteInSec = time()-strtotime($oldtime);
 		$userAgent= $arr['userAgent'];
 
 		if(!$isFirstClick)
@@ -77,7 +76,8 @@ class CheckIP extends CI_Controller {
 			$points=$this->ip_model->LoadPoints($ip);
 			echo "<br> points=$points";
 			$lastTimeInMinutes=$timeOnSiteInSec/60;
-			echo "<br> lastTimeInMinutes=$lastTimeInMinutes";
+			echo "<br> lastTimeInMinutes=$lastTimeInMinutes"
+			."<br>timeOnSiteInSec=$timeOnSiteInSec;";
 			
 			if($lastTimeInMinutes > $K_min)
 			{
@@ -182,6 +182,7 @@ class CheckIP extends CI_Controller {
 
 		$this->ip_model->InsertPoints($ip,$points);
 		$this->click_model->AddTimeOut(time());
+		
 		/////////////////////////////////////////////////////*/
 	}
 }
