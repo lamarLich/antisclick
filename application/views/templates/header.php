@@ -7,22 +7,9 @@
 
     <!-- Bootstrap -->
     <link href="/styles/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
-	<script src="http://yastatic.net/jquery/2.1.1/jquery.min.js"></script>
-	<script type="text/javascript"> 
-window.onload = function () {   
-    var data = '{"width": ' + screen['availWidth'] +',"height": ' + screen['availHeight'] +',"platform": "' + navigator['plarform'] +'","userAgent": "' + navigator['userAgent'] +'","city": "' + ymaps.geolocation.city +'","region": "' + ymaps.geolocation.region +'","country": "' + ymaps.geolocation.country +'"}';
-
-   $.ajax({
-    type: "POST",
-    url: "http://localhost/CheckIP",
-    data: data,
-    success: function(response){
-     alert(response);
-   	}
- 	});
-}
-</script>
+    <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&amp;lang=ru-RU"></script>
+    <script src="http://yastatic.net/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/styles/js/anticlick.js?<?php echo time(); ?>"></script>
 
 </head>
 <body>
