@@ -14,21 +14,24 @@ function $_GET(param) {
 }
 window.onload = function() {
 
-    var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['plarform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
-
+    var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
     $.ajax({
         type: "POST",
         url: "http://mmmkz.esy.es/checkIP",
-        data: data,
+        data:{'json':data} ,
         success: function(response) {
-            //
+            //alert(response);//
         }
     });
 }
 
 window.onbeforeunload = function() {
-    $.ajax({
+    //alert("close");//
+	$.ajax({
         type: "POST",
-        url: "http://mmmkz.esy.es/checkIP/close"
+        url: "http://mmmkz.esy.es/checkIP/close",
+		success: function(response) {
+            //alert(response);//
+        }
     });
 }

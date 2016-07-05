@@ -25,8 +25,14 @@ class CheckIP extends CI_Controller {
 		echo "ip = ".$ip."<br>";
   		var_dump($arr);
   		
-		$from =$_SERVER['HTTP_REFERER'];
-		$arr['country'] = $from;
+  		if(isset($_SERVER['HTTP_REFERER']))
+  		{
+			$from =$_SERVER['HTTP_REFERER'];
+			$arr['country'] = $from;
+  		}
+  		if ($arr['region']== null) {
+  			$arr['region'] = "not_UTM_SOURCE";
+  		}
 		$this->load->model('ip_model'); // загрузка модели
 		$this->load->model('click_model'); // загрузка модели
 		$this->load->model('user_model'); // загрузка модели
@@ -62,8 +68,8 @@ class CheckIP extends CI_Controller {
 		//$id_user =	$arr['region'];
 		$arr = $this->click_model->GetClick();
 		$points=0;
-		$ourRegion= "Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
-		$clientRegion= $arr['region'];
+		$ourRegion= "Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
+		$clientRegion= $arr['city'];
 		$isFirstClick= $this->click_model->IsFirstClick($ip); 
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
 		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
