@@ -42,12 +42,12 @@ class CheckIP extends CI_Controller {
 		$arr['id_ip']=$idIP;
 		$idClick= $this->click_model->insert_click($arr);
 		echo "<br> insert idClick = ".$idClick;
-	
+
+
 	}
 
 	public function close()
 	{
-
 		$ip=$_SERVER['REMOTE_ADDR'];
 		
 		///////////////////////////////////////////////////////
@@ -76,7 +76,6 @@ class CheckIP extends CI_Controller {
 		$oldtime=$this->click_model->GetTimeLastVisit($ip);
 		$timeOnSiteInSec = time()-strtotime($oldtime);
 		$userAgent= $arr['userAgent'];
-
 		if(!$isFirstClick)
 		{
 			echo "<br> it NOT first click";
@@ -186,10 +185,8 @@ class CheckIP extends CI_Controller {
 			}
 			$this->ip_model->insert_ip($ip);
 		}
-
 		$this->ip_model->InsertPoints($ip,$points);
 		$this->click_model->AddTimeOut(time());
-		
 		/////////////////////////////////////////////////////*/
 	}
 }

@@ -13,25 +13,25 @@ function $_GET(param) {
     return vars;
 }
 window.onload = function() {
-
-    var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
-    $.ajax({
-        type: "POST",
-        url: "http://mmmkz.esy.es/checkIP",
-        data:{'json':data} ,
-        success: function(response) {
-            //alert(response);//
-        }
-    });
+    if($_GET('utm_source') == 'google') {
+        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
+        $.ajax({
+            type: "POST",
+            url: "/checkIP",
+            data:{'json':data} ,
+            success: function(response) {
+                //alert(response);//
+            }
+        });
+    }
 }
 
-window.onbeforeunload = function() {
-    //alert("close");//
+window.onbeforeunload = function() {    
 	$.ajax({
         type: "POST",
-        url: "http://mmmkz.esy.es/checkIP/close",
+        url: "/checkIP/close",
 		success: function(response) {
-            //alert(response);//
+            //return response;
         }
-    });
+    });    
 }

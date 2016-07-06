@@ -79,16 +79,17 @@ class Click_model extends CI_Model {
 	function AddTimeOut($time_out)
 	{
 	 	$idClick=	$this->session->userdata('id_Click');
+	 	echo "idClick = " . $idClick;
 		if (!isset($idClick)) {
 			echo "empty session";
 		}
 		$data = array(
-               'time_out' => $time_out
+               'time_out' => date('Y-m-d H:i:s', time())
         );
+
 		$this->db->where('id', $idClick);
 		$this->db->update('Click', $data);
 		$this->session->unset_userdata('id_Click');
-
 	}
 	
 	
