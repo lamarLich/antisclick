@@ -13,7 +13,6 @@ function $_GET(param) {
     return vars;
 }
 function ImStillHere() {
-    document.writeln(')')
     $.ajax({
         type: "POST",
         url: "http://mmmkz.esy.es/checkIP/stillhere",
