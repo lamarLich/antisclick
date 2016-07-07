@@ -13,12 +13,12 @@ function $_GET(param) {
     return vars;
 }
 window.onload = function() {
-    if($_GET('utm_source') == 'google') {
-        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
+    if ($_GET('utm_source') == 'google') {
+        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
         $.ajax({
             type: "POST",
             url: "http://mmmkz.esy.es/checkIP",
-            data:{'json':data} ,
+            data: { 'json': data },
             success: function(response) {
                 //alert(response);//
             }
@@ -26,12 +26,12 @@ window.onload = function() {
     }
 }
 
-window.onbeforeunload = function() {    
-	$.ajax({
+window.onbeforeunload = function() {
+    $.ajax({
         type: "POST",
         url: "http://mmmkz.esy.es/checkIP/close",
-		success: function(response) {
+        success: function(response) {
             //return response;
         }
-    });    
+    });
 }
