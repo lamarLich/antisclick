@@ -33,7 +33,8 @@ td {
 		<tr class='site site-<?=$item['id_Site'];?>'>
 			<td><?=$item['id'];?>			</td> 
 			<td><?=$item['name'];?>			</td>
-			<td><?=$item['userAgent'];?>	</td> 
+			<td><?=$item['IP'];?>			</td>
+			<td><?=$item['points'];?>		</td>  
 			<td><?=$item['width_screen'];?>	</td> 
 			<td><?=$item['height_screen'];?></td> 
 			<td><?=$item['city'];?>			</td> 
@@ -51,7 +52,8 @@ td {
 		<tr class='site site-<?=$item['id_Site'];?>'>
 			<td><?=$item['id'];?>			</td> 
 			<td><?=$item['name'];?>			</td>
-			<td><?=$item['userAgent'];?>	</td> 
+			<td><?=$item['IP'];?>			</td> 
+			<td><?=$item['points'];?>		</td>  
 			<td><?=$item['width_screen'];?>	</td> 
 			<td><?=$item['height_screen'];?></td> 
 			<td><?=$item['city'];?>			</td> 
@@ -68,7 +70,8 @@ td {
     <?php foreach($clicks_strange_ip as $item):?> 
 		<tr class='site site-<?=$item['id_Site'];?>'>
 			<td><?=$item['id'];?>			</td> 
-			<td><?=$item['userAgent'];?>	</td> 
+			<td><?=$item['IP'];?>			</td> 
+			<td><?=$item['points'];?>		</td>  
 			<td><?=$item['width_screen'];?>	</td> 
 			<td><?=$item['height_screen'];?></td> 
 			<td><?=$item['city'];?>			</td> 
