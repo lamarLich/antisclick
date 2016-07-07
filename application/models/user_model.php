@@ -14,4 +14,10 @@ class User_model extends CI_Model
         $this->db->insert('user', $data);
         return $this->db->insert_id();
     }
+
+    function GetSec()
+    {
+        
+    }
+
 }

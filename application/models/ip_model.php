@@ -66,33 +66,54 @@ class Ip_model extends CI_Model
     }
     function get_all_clicks()
     {
-        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id INNER JOIN site ON click.`id_Site`=site.id;";
+        $qGetClick = "SELECT *,click.id as id_Click FROM click INNER JOIN ip ON click.`id_IP`=ip.id INNER JOIN site ON click.`id_Site`=site.id;";
         $res       = $this->db->query($qGetClick);
-        $ClickData = $res->result_array();
-        if (count($ClickData) == 0) {
+        $data = $res->result_array();
+        if (count($data) == 0) {
             return array();
         }
-        return $ClickData;
+        foreach ($data as &$value) {
+            $sec = $value['time_out']-$value['time_in'];
+            $min =$sec/60;
+            $value['time_all']    =  (integer)$min.":".$sec%60;
+            $value['time_in']     = date('Y-m-d H:i:s', $value['time_in']);
+            $value['time_out']    = date('Y-m-d H:i:s', $value['time_out']);
+        }
+        return $data;
     }
     function get_clicks_where_bad_ip()
     {
-        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id  AND ip.isBad=true INNER JOIN site ON click.`id_Site`=site.id;";
+        $qGetClick = "SELECT *,click.id as id_Click FROM click INNER JOIN ip ON click.`id_IP`=ip.id  AND ip.isBad=true INNER JOIN site ON click.`id_Site`=site.id;";
         $res       = $this->db->query($qGetClick);
-        $ClickData = $res->result_array();
-        if (count($ClickData) == 0) {
+        $data = $res->result_array();
+        if (count($data) == 0) {
             return array();
         }
-        return $ClickData;
+        foreach ($data as &$value) {
+            $sec = $value['time_out']-$value['time_in'];
+            $min =$sec/60;
+            $value['time_all']    =  (integer)$min.":".$sec%60;
+            $value['time_in']     = date('Y-m-d H:i:s', $value['time_in']);
+            $value['time_out']    = date('Y-m-d H:i:s', $value['time_out']);
+        }
+        return $data;
     }
     function get_clicks_where_strange_ip()
     {
-        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.points>0;";
+        $qGetClick = "SELECT *,click.id as id_Click FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.points>0 INNER JOIN site ON click.`id_Site`=site.id;";
         $res       = $this->db->query($qGetClick);
-        $ClickData = $res->result_array();
-        if (count($ClickData) == 0) {
+        $data = $res->result_array();
+        if (count($data) == 0) {
             return array();
         }
-        return $ClickData;
+        foreach ($data as &$value) {
+            $sec = $value['time_out']-$value['time_in'];
+            $min =$sec/60;
+            $value['time_all']    =  (integer)$min.":".$sec%60;
+            $value['time_in']     = date('Y-m-d H:i:s', $value['time_in']);
+            $value['time_out']    = date('Y-m-d H:i:s', $value['time_out']);
+        }
+        return $data;
     }
 
 	function get_all_sites()

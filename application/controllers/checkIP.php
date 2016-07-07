@@ -53,7 +53,131 @@ class CheckIP extends CI_Controller {
 		$arr['id_ip']=$idIP;
 		$idClick= $this->click_model->insert_click($arr);
 		echo "<br> insert idClick = ".$idClick;
+		if($this->click_model->IsFirstClick($ip) ==true)
+		{
+			return;
+		}	
 
+		$arr = $this->click_model->GetLastClickWhereIP($ip);
+		$points=0;
+		$ourRegion= "Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
+		$clientRegion= $arr['city'];
+		$isFirstClick= false;//$this->click_model->IsFirstClick($ip); 
+		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
+		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
+		$oldtime=$this->click_model->GetTimeLastVisit($ip);
+		$timeOnSiteInSec = time()-$oldtime;
+		$userAgent= $arr['userAgent'];
+		if($isFirstClick==false)
+		{
+			echo "<br> it NOT first click";
+			$points=$this->ip_model->LoadPoints($ip);
+			echo "<br> points=$points";
+			$lastTimeInMinutes=$timeOnSiteInSec/60;
+			echo "<br> lastTimeInMinutes=$lastTimeInMinutes"
+			."<br>timeOnSiteInSec=$timeOnSiteInSec;";
+			
+			if($lastTimeInMinutes > $K_min)
+			{
+				if($timeOnSiteInSec > $N_sec)
+				{
+					if ($clientRegion == $ourRegion)
+					{
+						//$this->click_model->AddTimeOut(time());
+						return;
+					}
+					else
+					{
+						$points++;
+					}
+				}
+				else
+				{
+					if ($clientRegion == $ourRegion)
+					{
+						$points++;
+					}
+					else
+					{
+						$points+=2;
+					}
+				}
+			}
+			else
+			{
+				if($timeOnSiteInSec > $N_sec)
+				{
+					if ($this->click_model->IsBeUserAgent($userAgent))
+					{
+						if ($clientRegion == $ourRegion)
+						{
+							$points+=3;
+						}
+						else
+						{
+							$points=999;
+						}
+					}
+					else
+					{
+						if ($clientRegion == $ourRegion)
+						{
+							$points++;
+						}
+						else
+						{
+							$points+=3;
+						}
+					}
+				}
+				else
+				{
+					if ($this->click_model->IsBeUserAgent($userAgent))
+					{
+						$points=999;						
+					}
+					else
+					{
+						if ($clientRegion == $ourRegion)
+						{
+							$points+=4;
+						}
+						else
+						{
+							$points=999;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if($timeOnSiteInSec > $N_sec)
+			{
+				if ($clientRegion == $ourRegion)
+				{
+					$this->ip_model->insert_ip($ip);
+					return;
+				}
+				else
+				{
+					$points++;
+				}
+			}
+			else
+			{
+				if ($clientRegion == $ourRegion)
+				{
+					$points++;
+				}
+				else
+				{
+					$points+=2;
+				}
+			}
+			$this->ip_model->insert_ip($ip);
+		}
+		$this->ip_model->InsertPoints($ip,$points);
 
 	}
 
@@ -63,7 +187,7 @@ class CheckIP extends CI_Controller {
 		$this->load->model('click_model'); // загрузка модели
 
 		$this->click_model->AddTimeOutIteration(); 
-		echo date('H:i:s', time());
+		echo "<br>".date('H:i:s', time());
 	}
 
 	public function close()

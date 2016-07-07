@@ -29,9 +29,24 @@ td {
 
     <h3>Таблица всех кликов</h3>
     <table>
+		<tr>
+    		<td><b>id		</b></td> 
+			<td><b>Домен	</b></td>
+			<td><b>IP		</b></td>
+			<td><b>points	</b></td>  
+			<td><b>Ширина	</b></td> 
+			<td><b>Высота	</b></td> 
+			<td><b>Город	</b></td> 
+			<td><b>Регион	</b></td> 
+			<td><b>Страна	</b></td> 
+			<td><b>Платформа</b></td> 
+			<td><b>Вход		</b></td>
+			<td><b>Выход	</b></td>
+			<td><b>Всего	</b></td>
+    	</tr>
     <?php foreach($all_clicks as $item):?> 
 		<tr class='site site-<?=$item['id_Site'];?>'>
-			<td><?=$item['id'];?>			</td> 
+			<td><?=$item['id_Click'];?>		</td> 
 			<td><?=$item['name'];?>			</td>
 			<td><?=$item['IP'];?>			</td>
 			<td><?=$item['points'];?>		</td>  
@@ -43,14 +58,30 @@ td {
 			<td><?=$item['platform'];?>		</td> 
 			<td><?=$item['time_in'];?>		</td>
 			<td><?=$item['time_out'];?>		</td>
+			<td><?=$item['time_all'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>
     <h3>Таблица всех плохих кликов</h3>
     <table>
+	<tr>
+    		<td><b>id		</b></td> 
+			<td><b>Домен	</b></td>
+			<td><b>IP		</b></td>
+			<td><b>points	</b></td>  
+			<td><b>Ширина	</b></td> 
+			<td><b>Высота	</b></td> 
+			<td><b>Город	</b></td> 
+			<td><b>Регион	</b></td> 
+			<td><b>Страна	</b></td> 
+			<td><b>Платформа</b></td> 
+			<td><b>Вход		</b></td>
+			<td><b>Выход	</b></td>
+			<td><b>Всего	</b></td>
+    	</tr>
     <?php foreach($clicks_bad_ip as $item):?> 
 		<tr class='site site-<?=$item['id_Site'];?>'>
-			<td><?=$item['id'];?>			</td> 
+			<td><?=$item['id_Click'];?>		</td> 
 			<td><?=$item['name'];?>			</td>
 			<td><?=$item['IP'];?>			</td> 
 			<td><?=$item['points'];?>		</td>  
@@ -62,14 +93,31 @@ td {
 			<td><?=$item['platform'];?>		</td> 
 			<td><?=$item['time_in'];?>		</td>
 			<td><?=$item['time_out'];?>		</td>
+			<td><?=$item['time_all'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>
     <h3>Таблица всех подозрительных кликов</h3>
     <table>
+	<tr>
+    		<td><b>id		</b></td> 
+			<td><b>Домен	</b></td>
+			<td><b>IP		</b></td>
+			<td><b>points	</b></td>  
+			<td><b>Ширина	</b></td> 
+			<td><b>Высота	</b></td> 
+			<td><b>Город	</b></td> 
+			<td><b>Регион	</b></td> 
+			<td><b>Страна	</b></td> 
+			<td><b>Платформа</b></td> 
+			<td><b>Вход		</b></td>
+			<td><b>Выход	</b></td>
+			<td><b>Всего	</b></td>
+    	</tr>
     <?php foreach($clicks_strange_ip as $item):?> 
 		<tr class='site site-<?=$item['id_Site'];?>'>
-			<td><?=$item['id'];?>			</td> 
+			<td><?=$item['id_Click'];?>		</td> 
+			<td><?=$item['name'];?>			</td>
 			<td><?=$item['IP'];?>			</td> 
 			<td><?=$item['points'];?>		</td>  
 			<td><?=$item['width_screen'];?>	</td> 
@@ -80,6 +128,7 @@ td {
 			<td><?=$item['platform'];?>		</td> 
 			<td><?=$item['time_in'];?>		</td>
 			<td><?=$item['time_out'];?>		</td>
+			<td><?=$item['time_all'];?>		</td>
 		</tr>
 	<?php endforeach;?>	
     </table>

@@ -27,19 +27,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `click` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_IP` int(11) NOT NULL,
-  `userAgent` varchar(255) NOT NULL,
-  `width_screen` int(11) NOT NULL,
-  `height_screen` int(11) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `region` varchar(255) NOT NULL,
-  `country` varchar(255) NOT NULL,
-  `platform` varchar(255) NOT NULL,
-  `time_in` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `time_out` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `id_Site` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  `id` int NOT NULL AUTO_INCREMENT,
+	`id_IP` int NOT NULL,
+	`userAgent` varchar(255) NOT NULL,
+	`width_screen` int NOT NULL,
+	`height_screen` int NOT NULL,
+	`city` varchar(255) NOT NULL,
+	`region` varchar(255) NOT NULL,
+	`country` varchar(255) NOT NULL,
+	`platform` varchar(255) NOT NULL,
+	`time_in` int(12) NOT NULL,
+	`time_out` int(12),
+	`id_Site` int NOT NULL,
+	PRIMARY KEY (`id`),
   KEY `Click_fk0` (`id_IP`),
   KEY `Click_fk1` (`id_Site`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
