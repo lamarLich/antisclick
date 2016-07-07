@@ -77,7 +77,7 @@ class Ip_model extends CI_Model {
     }
     function get_clicks_where_strange_ip()
     {
-        $qGetClick = "SELECT * FROM click INNER JOIN IP ON click.`id_IP`=ip.id AND ip.points>0;";
+        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.points>0;";
 		$res = $this->db->query($qGetClick);
 		$ClickData = $res->result_array();
 		if (count($ClickData) == 0) {
