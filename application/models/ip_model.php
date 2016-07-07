@@ -94,6 +94,20 @@ class Ip_model extends CI_Model
         }
         return $ClickData;
     }
+<<<<<<< HEAD
+	function get_all_sites()
+	{
+		$qGetSite = "SELECT * FROM site";
+		$res = $this->db->query($qGetSite);
+		$SiteData = $res->result_array();
+		if (count($SiteData) == 0) {
+			return array();
+		}
+		return $SiteData;
+	}
+	
+=======
     
     
+>>>>>>> origin/master
 }

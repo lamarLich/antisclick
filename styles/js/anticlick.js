@@ -13,7 +13,7 @@ function $_GET(param) {
     return vars;
 }
 window.onload = function() {
-    if ($_GET('utm_source') == 'google') {
+    //if ($_GET('utm_source') == 'google') {
         var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
         $.ajax({
             type: "POST",
@@ -23,10 +23,11 @@ window.onload = function() {
                 //alert(response);//
             }
         });
-    }
+    //}
 }
 
-window.onbeforeunload = function() {
+window.onunload = function() {
+    return '123';
     $.ajax({
         type: "POST",
         url: "http://mmmkz.esy.es/checkIP/close",

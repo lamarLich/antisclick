@@ -21,7 +21,8 @@ class Panel extends CI_Controller {
      	$data['all_IP'] = $this->ip_model->get_all_ips();  
      	$data['all_clicks'] = $this->ip_model->get_all_clicks();  
      	$data['clicks_bad_ip'] = $this->ip_model->get_clicks_where_bad_ip();  
-     	$data['clicks_strange_ip'] = $this->ip_model->get_clicks_where_strange_ip();  
+     	$data['clicks_strange_ip'] = $this->ip_model->get_clicks_where_strange_ip(); 
+     	$data['all_sites'] = $this->ip_model->get_all_sites(); 
 		$this->load->view('panel_stat',$data);
 		
 		$this->load->view('templates/footer');
