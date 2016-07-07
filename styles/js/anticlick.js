@@ -17,7 +17,7 @@ function ImStillHere() {
         type: "POST",
         url: "http://mmmkz.esy.es/checkIP/stillhere",
         success: function(response) {
-                document.writeln(response);
+            //
         }
     });
 }
