@@ -94,7 +94,7 @@ class Ip_model extends CI_Model
         }
         return $ClickData;
     }
-<<<<<<< HEAD
+
 	function get_all_sites()
 	{
 		$qGetSite = "SELECT * FROM site";
@@ -106,8 +106,5 @@ class Ip_model extends CI_Model
 		return $SiteData;
 	}
 	
-=======
-    
-    
->>>>>>> origin/master
+
 }
