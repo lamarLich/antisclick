@@ -105,6 +105,22 @@ class Click_model extends CI_Model
         $this->db->update('click', $data);
         $this->session->unset_userdata('id_Click');
     }
-    
+
+    function AddTimeOutIteration()
+    {
+        $idClick = $this->session->userdata('id_Click');
+        echo "idClick = " . $idClick;
+        if (!isset($idClick)) {
+            echo "empty session";
+            die;
+        }
+        $data = array(
+            'time_out' => date('Y-m-d H:i:s', time())
+        );
+        
+        $this->db->where('id', $idClick);
+        $this->db->update('click', $data);
+        //$this->session->unset_userdata('id_Click');
+    }
     
 }

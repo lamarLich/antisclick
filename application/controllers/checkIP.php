@@ -57,6 +57,15 @@ class CheckIP extends CI_Controller {
 
 	}
 
+	public function stillhere()
+	{
+		$ip=$_SERVER['REMOTE_ADDR'];
+		$this->load->model('click_model'); // загрузка модели
+
+		$this->click_model->AddTimeOutIteration(); 
+		echo date('H:i:s', time());
+	}
+
 	public function close()
 	{
 		$ip=$_SERVER['REMOTE_ADDR'];
