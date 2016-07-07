@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Июл 04 2016 г., 16:12
+-- Время создания: Июл 07 2016 г., 08:05
 -- Версия сервера: 5.6.14
 -- Версия PHP: 5.5.6
 
@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Структура таблицы `click`
 --
 
-CREATE TABLE IF NOT EXISTS `Click` (
+CREATE TABLE IF NOT EXISTS `click` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_IP` int(11) NOT NULL,
   `userAgent` varchar(255) NOT NULL,
@@ -38,8 +38,10 @@ CREATE TABLE IF NOT EXISTS `Click` (
   `platform` varchar(255) NOT NULL,
   `time_in` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `time_out` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `id_Site` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `Click_fk0` (`id_IP`)
+  KEY `Click_fk0` (`id_IP`),
+  KEY `Click_fk1` (`id_Site`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -48,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `Click` (
 -- Структура таблицы `ip`
 --
 
-CREATE TABLE IF NOT EXISTS `IP` (
+CREATE TABLE IF NOT EXISTS `ip` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `IP` varchar(16) NOT NULL,
   `isBad` tinyint(1) NOT NULL DEFAULT '0',
@@ -62,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `IP` (
 -- Структура таблицы `region`
 --
 
-CREATE TABLE IF NOT EXISTS `Region` (
+CREATE TABLE IF NOT EXISTS `region` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
@@ -71,10 +73,24 @@ CREATE TABLE IF NOT EXISTS `Region` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `site`
+--
+
+CREATE TABLE IF NOT EXISTS `site` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `id_User` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Site_fk0` (`id_User`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `user`
 --
 
-CREATE TABLE IF NOT EXISTS `User` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(500) NOT NULL,
   `password` varchar(500) NOT NULL,
@@ -89,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 -- Структура таблицы `user_region`
 --
 
-CREATE TABLE IF NOT EXISTS `User_Region` (
+CREATE TABLE IF NOT EXISTS `user_region` (
   `id_User` int(11) NOT NULL,
   `id_Region` int(11) NOT NULL,
   KEY `User_Region_fk0` (`id_User`),
@@ -103,15 +119,22 @@ CREATE TABLE IF NOT EXISTS `User_Region` (
 --
 -- Ограничения внешнего ключа таблицы `click`
 --
-ALTER TABLE `Click`
-  ADD CONSTRAINT `Click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `IP` (`id`);
+ALTER TABLE `click`
+  ADD CONSTRAINT `Click_fk1` FOREIGN KEY (`id_Site`) REFERENCES `site` (`id`),
+  ADD CONSTRAINT `Click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `ip` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `site`
+--
+ALTER TABLE `site`
+  ADD CONSTRAINT `Site_fk0` FOREIGN KEY (`id_User`) REFERENCES `user` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `user_region`
 --
-ALTER TABLE `User_Region`
-  ADD CONSTRAINT `User_Region_fk1` FOREIGN KEY (`id_Region`) REFERENCES `Region` (`id`),
-  ADD CONSTRAINT `User_Region_fk0` FOREIGN KEY (`id_User`) REFERENCES `User` (`id`);
+ALTER TABLE `user_region`
+  ADD CONSTRAINT `User_Region_fk1` FOREIGN KEY (`id_Region`) REFERENCES `region` (`id`),
+  ADD CONSTRAINT `User_Region_fk0` FOREIGN KEY (`id_User`) REFERENCES `user` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

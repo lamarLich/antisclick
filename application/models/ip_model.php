@@ -8,7 +8,7 @@ class Ip_model extends CI_Model {
 	
 	function LoadPoints($ip)
 	{
-		$qGetQuery = "SELECT points FROM IP WHERE IP=?;";
+		$qGetQuery = "SELECT points FROM ip WHERE IP=?;";
 		$res = $this->db->query($qGetQuery,array($ip));
 		$data = $res->result_array();
 		if (count($data) == 0) {
@@ -27,42 +27,47 @@ class Ip_model extends CI_Model {
 		}
 		
 		$this->db->where('IP', $ip);
-		$this->db->update('IP', $data);
+		$this->db->update('ip', $data);
 	}
 
 
 
 	function insert_ip($ip)
 	{
-		$qGetQuery = "SELECT id FROM IP WHERE IP=?;";
+		$qGetQuery = "SELECT id FROM ip WHERE IP=?;";
 		$res = $this->db->query($qGetQuery,array($ip));
 		$data = $res->result_array();
 		if (count($data) != 0) {
 			return $data[0]['id'];
 		}
-        $this->db->insert('IP',  array('IP' => $ip ));
+        $this->db->insert('ip',  array('IP' => $ip ));
         return $this->db->insert_id();
 	}
 	
     function get_bad_ips()
     {
 		$this->db->where('isBad',true);  
-        $query = $this->db->get('IP'); 
+        $query = $this->db->get('ip'); 
         return $query->result_array();  
     }
     function get_all_ips()
     {
-        $query = $this->db->get('IP'); 
+        $query = $this->db->get('ip'); 
         return $query->result_array();  
     }
     function get_all_clicks()
     {
-        $query = $this->db->get('Click'); 
-        return $query->result_array();  
+        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id INNER JOIN site ON click.`id_Site`=site.id;";
+		$res = $this->db->query($qGetClick);
+		$ClickData = $res->result_array();
+		if (count($ClickData) == 0) {
+			return array();
+		}
+		return $ClickData; 
     }
     function get_clicks_where_bad_ip()
     {
-        $qGetClick = "SELECT * FROM Click INNER JOIN IP ON Click.`id_IP`=IP.id  AND IP.isBad=true;";
+        $qGetClick = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id  AND ip.isBad=true INNER JOIN site ON click.`id_Site`=site.id;";
 		$res = $this->db->query($qGetClick);
 		$ClickData = $res->result_array();
 		if (count($ClickData) == 0) {
@@ -72,7 +77,7 @@ class Ip_model extends CI_Model {
     }
     function get_clicks_where_strange_ip()
     {
-        $qGetClick = "SELECT * FROM Click INNER JOIN IP ON Click.`id_IP`=IP.id AND IP.points>0;";
+        $qGetClick = "SELECT * FROM click INNER JOIN IP ON click.`id_IP`=ip.id AND ip.points>0;";
 		$res = $this->db->query($qGetClick);
 		$ClickData = $res->result_array();
 		if (count($ClickData) == 0) {

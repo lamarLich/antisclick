@@ -25,17 +25,28 @@ class CheckIP extends CI_Controller {
 		echo "ip = ".$ip."<br>";
   		var_dump($arr);
   		
-  		if(isset($_SERVER['HTTP_REFERER']))
-  		{
-			$from =$_SERVER['HTTP_REFERER'];
-			$arr['country'] = $from;
-  		}
-  		if ($arr['region']== null) {
-  			$arr['region'] = "not_UTM_SOURCE";
-  		}
 		$this->load->model('ip_model'); // загрузка модели
 		$this->load->model('click_model'); // загрузка модели
 		$this->load->model('user_model'); // загрузка модели
+		$this->load->model('site_model'); // загрузка модели
+
+  		if(isset($_SERVER['HTTP_REFERER']))
+  		{
+			$from =$_SERVER['HTTP_REFERER'];
+			$from = explode("/", $from)[2];
+			echo "<br>HTTP_REFERER = ".$from.";<br>";
+
+			$data['login']=			"test";
+			$data['password']=		"test";
+			$data['K_min']=			2;
+			$data['N_sec']=			20;
+			$idUser = $this->user_model->insert_user($data);
+			$arr['id_Site'] = $this->site_model->insert_site($from,$idUser);
+  		}
+  		else{
+  			echo "empty HTTP_REFERER";
+  			die;
+  		}
 
 		$idIP=$this->ip_model->insert_ip($ip);
 		echo "<br> insert idIP = ".$idIP;

@@ -25,6 +25,7 @@ td {
     <?php foreach($all_clicks as $item):?> 
 		<tr>
 			<td><?=$item['id'];?>			</td> 
+			<td><?=$item['name'];?>			</td>
 			<td><?=$item['userAgent'];?>	</td> 
 			<td><?=$item['width_screen'];?>	</td> 
 			<td><?=$item['height_screen'];?></td> 
@@ -42,6 +43,7 @@ td {
     <?php foreach($clicks_bad_ip as $item):?> 
 		<tr>
 			<td><?=$item['id'];?>			</td> 
+			<td><?=$item['name'];?>			</td>
 			<td><?=$item['userAgent'];?>	</td> 
 			<td><?=$item['width_screen'];?>	</td> 
 			<td><?=$item['height_screen'];?></td> 
