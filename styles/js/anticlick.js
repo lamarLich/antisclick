@@ -23,7 +23,7 @@ function ImStillHere() {
 }
 window.onload = function() {
     //if ($_GET('utm_source') == 'google') {
-        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
+        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "NEW_utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
         $.ajax({
             type: "POST",
             url: "http://mmmkz.esy.es/checkIP",
