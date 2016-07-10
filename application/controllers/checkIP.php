@@ -186,8 +186,10 @@ class CheckIP extends CI_Controller {
 		$ip=$_SERVER['REMOTE_ADDR'];
 		$this->load->model('click_model'); // загрузка модели
 
-		$this->click_model->AddTimeOutIteration(); 
-		echo "<br>".date('H:i:s', time());
+		$result = $this->click_model->AddTimeOutIteration(); 
+		if ($result == false) {
+			$this->click_model->AddTimeOutIterationWhereIP($ip);
+		}
 	}
 
 	public function close()

@@ -115,11 +115,31 @@ class Click_model extends CI_Model
     {
         $idClick = $this->session->userdata('id_Click');
         if (!isset($idClick)) {
-            echo "empty session";
-            die;
+            return false;
         }
         $data = array(
             'time_out' =>  time()//date('Y-m-d H:i:s', time())
+        );
+        
+        $this->db->where('id', $idClick);
+        $this->db->update('click', $data);
+        return true;
+        //$this->session->unset_userdata('id_Click');
+    }
+    function AddTimeOutIterationWhereIP($ip)
+    {
+        $qGetQuery = "SELECT click.id FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.IP=? ORDER BY click.id DESC;";
+        $res       = $this->db->query($qGetQuery, array(
+            $ip
+        ));
+        $data      = $res->result_array();
+        if (count($data) == 0) {
+            return array();
+        }
+        $idClick   = $data[0]["id"];
+
+        $data = array(
+            'time_out' =>  time()
         );
         
         $this->db->where('id', $idClick);
