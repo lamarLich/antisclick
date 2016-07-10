@@ -23,17 +23,19 @@ function ImStillHere() {
 }
 window.onload = function() {
     if ($_GET('utm_source') == 'google') {
-        var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "NEW_utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
-        $.ajax({
-            type: "POST",
-            url: "http://landofbrand.ru/checkIP",
-            data: { 'json': data },
-            success: function(response) {
-                //alert(response);//
-            }
-        });
-
-        setInterval(ImStillHere, 3000);
+		if(navigator['userAgent'].indexOf('Googlebot') == -1){
+			var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "UTM_SOURCE=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
+			$.ajax({
+				type: "POST",
+				url: "http://landofbrand.ru/checkIP",
+				data: { 'json': data },
+				success: function(response) {
+					//alert(response);//
+				}
+			});
+	
+			setInterval(ImStillHere, 3000);
+		}
     }
 }
 

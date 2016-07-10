@@ -47,7 +47,12 @@ class CheckIP extends CI_Controller {
   			echo "empty HTTP_REFERER";
   			die;
   		}
-
+  		
+  		if ((strpos($_SERVER['HTTP_USER_AGENT'],"Googlebot") !== false) 
+			|| (strpos($_SERVER['HTTP_USER_AGENT'],"AdsBot-Google") !== false)) {
+  			return;
+  		}
+  		
 		$idIP=$this->ip_model->insert_ip($ip);
 		echo "<br> insert idIP = ".$idIP;
 		$arr['id_ip']=$idIP;
