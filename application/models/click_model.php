@@ -28,8 +28,8 @@ class Click_model extends CI_Model
         $data['region']        = $arr['region'];
         $data['country']       = $arr['country'];
         $data['platform']      = $arr['platform'];
-        $data['time_in']       =  time();//date('Y-m-d H:i:s', time());
-        $data['time_out']      = 0;
+        $data['time_in']       = time();//date('Y-m-d H:i:s', time());
+        $data['time_out']      = time();
         $data['id_Site']       = $arr['id_Site'];
         
         $this->db->insert('click', $data);

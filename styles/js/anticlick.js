@@ -15,18 +15,18 @@ function $_GET(param) {
 function ImStillHere() {
     $.ajax({
         type: "POST",
-        url: "http://mmmkz.esy.es/checkIP/stillhere",
+        url: "http://landofbrand.ru/checkIP/stillhere",
         success: function(response) {
             //
         }
     });
 }
 window.onload = function() {
-    //if ($_GET('utm_source') == 'google') {
+    if ($_GET('utm_source') == 'google') {
         var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "NEW_utm_source=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
         $.ajax({
             type: "POST",
-            url: "http://mmmkz.esy.es/checkIP",
+            url: "http://landofbrand.ru/checkIP",
             data: { 'json': data },
             success: function(response) {
                 //alert(response);//
@@ -34,14 +34,14 @@ window.onload = function() {
         });
 
         setInterval(ImStillHere, 3000);
-    //}
+    }
 }
 
 window.onunload = function() {
-    return '123';
+    //return '123';
     $.ajax({
         type: "POST",
-        url: "http://mmmkz.esy.es/checkIP/close",
+        url: "http://landofbrand.ru/checkIP/close",
         success: function(response) {
             //return response;
         }
