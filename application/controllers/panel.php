@@ -27,4 +27,38 @@ class Panel extends CI_Controller {
 		
 		$this->load->view('templates/footer');
 	}
+	public function Regions()
+	{
+		$data['title'] =  "Управление целевыми регионами";
+		$this->load->view('templates/header',$data);
+
+		$this->load->model('site_model'); // загрузка модели
+     	$data['sites'] = $this->site_model->GetAllSites();  
+		//////////////////////////  $this->load->view('panel_stat',$data);
+     	
+		$this->load->view('templates/footer');
+	}
+	public function AddRegion()
+	{
+		$json;
+
+		if (!isset($_GET['json']) && !isset($_POST['json'])) {
+			echo "error: empty json";
+  			die;
+		}
+		if (isset($_POST['json'])) {
+			$json = $_POST['json'];
+		}
+		elseif (isset($_GET['json'])) {
+		 	$json = $_GET['json'];
+		}
+		
+		$arr = json_decode($json, true);
+  		var_dump($arr);
+
+		$this->load->model('site_model'); // загрузка модели
+		$id_Site=$this->site_model->GetID_site($arr["name"]);
+     	$data['sites'] = $this->site_model->AddCities($id_Site, $arr["cities"]);  
+     	echo "<br><br>all OK";
+	}
 }

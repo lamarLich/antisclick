@@ -54,10 +54,8 @@ class CheckIP extends CI_Controller {
   		}
   		
 		$idIP=$this->ip_model->insert_ip($ip);
-		echo "<br> insert idIP = ".$idIP;
 		$arr['id_ip']=$idIP;
 		$idClick= $this->click_model->insert_click($arr);
-		echo "<br> insert idClick = ".$idClick;
 		if($this->click_model->IsFirstClick($ip) ==true)
 		{
 			return;
@@ -65,7 +63,8 @@ class CheckIP extends CI_Controller {
 
 		$arr = $this->click_model->GetLastClickWhereIP($ip);
 		$points=0;
-		$ourRegion= "Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
+		$history;
+		$ourRegion= $this->site_model->GetCitysFromSiteID($arr['id_Site']);//"Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
 		$clientRegion= $arr['city'];
 		$isFirstClick= false;//$this->click_model->IsFirstClick($ip); 
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
@@ -77,6 +76,7 @@ class CheckIP extends CI_Controller {
 		{
 			echo "<br> it NOT first click";
 			$points=$this->ip_model->LoadPoints($ip);
+			$history=$this->ip_model->LoadHistory($ip);
 			echo "<br> points=$points";
 			$lastTimeInMinutes=$timeOnSiteInSec/60;
 			echo "<br> lastTimeInMinutes=$lastTimeInMinutes"
@@ -86,24 +86,28 @@ class CheckIP extends CI_Controller {
 			{
 				if($timeOnSiteInSec > $N_sec)
 				{
-					if ($clientRegion == $ourRegion)
+					if (in_array($clientRegion, $ourRegion))
 					{
+						$history=$history."<br>(5) N&gt;min &gt;sec city=Y good";
 						//$this->click_model->AddTimeOut(time());
 						return;
 					}
 					else
 					{
+						$history=$history."<br>(6) N&gt;min &gt;sec city=N +1";
 						$points++;
 					}
 				}
 				else
 				{
-					if ($clientRegion == $ourRegion)
+					if (in_array($clientRegion, $ourRegion))
 					{
+						$history=$history."<br>(7) N&gt;min &lt;sec city=Y +1";
 						$points++;
 					}
 					else
 					{
+						$history=$history."<br>(8) N&gt;min &lt;sec city=N +2";
 						$points+=2;
 					}
 				}
@@ -114,23 +118,27 @@ class CheckIP extends CI_Controller {
 				{
 					if ($this->click_model->IsBeUserAgent($userAgent))
 					{
-						if ($clientRegion == $ourRegion)
+						if (in_array($clientRegion, $ourRegion))
 						{
+							$history=$history."<br>(9) N&lt;min &gt;sec UA=Y city=Y +3";
 							$points+=3;
 						}
 						else
 						{
+							$history=$history."<br>(10) N&lt;min &gt;sec UA=Y city=N BAD";
 							$points=999;
 						}
 					}
 					else
 					{
-						if ($clientRegion == $ourRegion)
+						if (in_array($clientRegion, $ourRegion))
 						{
+							$history=$history."<br>(11) N&lt;min &gt;sec UA=N city=Y +1";
 							$points++;
 						}
 						else
 						{
+							$history=$history."<br>(12) N&lt;min &gt;sec UA=N city=N +3";
 							$points+=3;
 						}
 					}
@@ -139,16 +147,19 @@ class CheckIP extends CI_Controller {
 				{
 					if ($this->click_model->IsBeUserAgent($userAgent))
 					{
+						$history=$history."<br>(13) N&lt;min &lt;sec UA=Y BAD";
 						$points=999;						
 					}
 					else
 					{
-						if ($clientRegion == $ourRegion)
+						if (in_array($clientRegion, $ourRegion))
 						{
+							$history=$history."<br>(14) N&lt;min &lt;sec UA=N city=Y +4";
 							$points+=4;
 						}
 						else
 						{
+							$history=$history."<br>(15) N&lt;min &lt;sec UA=N city=N BAD";
 							$points=999;
 						}
 					}
@@ -159,30 +170,35 @@ class CheckIP extends CI_Controller {
 		{
 			if($timeOnSiteInSec > $N_sec)
 			{
-				if ($clientRegion == $ourRegion)
+				if (in_array($clientRegion, $ourRegion))
 				{
+					$history=$history."<br>(1) Y&gt;sec city=Y GOOD";
 					$this->ip_model->insert_ip($ip);
 					return;
 				}
 				else
 				{
+					$history=$history."<br>(2) Y&gt;sec city=N +1";
 					$points++;
 				}
 			}
 			else
 			{
-				if ($clientRegion == $ourRegion)
+				if (in_array($clientRegion, $ourRegion))
 				{
+					$history=$history."<br>(3) Y&lt;sec city=Y +1";
 					$points++;
 				}
 				else
 				{
+					$history=$history."<br>(4) Y&lt;sec city=N +2";
 					$points+=2;
 				}
 			}
 			$this->ip_model->insert_ip($ip);
 		}
 		$this->ip_model->InsertPoints($ip,$points);
+		$this->ip_model->InsertHistory($ip,$history);
 
 	}
 

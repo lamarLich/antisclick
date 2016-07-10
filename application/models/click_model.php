@@ -31,6 +31,14 @@ class Click_model extends CI_Model
         $data['time_in']       = time();//date('Y-m-d H:i:s', time());
         $data['time_out']      = time();
         $data['id_Site']       = $arr['id_Site'];
+        if (isset($arr['utm'])) 
+        {
+            $data['utm']       = $arr['utm'];
+        }
+        else
+        {
+            $data['utm']           ="null";
+        }
         
         $this->db->insert('click', $data);
         $idClick = $this->db->insert_id();

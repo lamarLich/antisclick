@@ -1,33 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 4.0.9
--- http://www.phpmyadmin.net
---
--- Хост: 127.0.0.1
--- Время создания: Июл 07 2016 г., 08:05
--- Версия сервера: 5.6.14
--- Версия PHP: 5.5.6
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- База данных: `db_anticlick`
---
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `click`
---
-
-CREATE TABLE IF NOT EXISTS `click` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `click` (
+	`id` int NOT NULL AUTO_INCREMENT,
 	`id_IP` int NOT NULL,
 	`userAgent` varchar(255) NOT NULL,
 	`width_screen` int NOT NULL,
@@ -39,103 +11,52 @@ CREATE TABLE IF NOT EXISTS `click` (
 	`time_in` int(12) NOT NULL,
 	`time_out` int(12),
 	`id_Site` int NOT NULL,
-	PRIMARY KEY (`id`),
-  KEY `Click_fk0` (`id_IP`),
-  KEY `Click_fk1` (`id_Site`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+	`utm` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
--- --------------------------------------------------------
+CREATE TABLE `ip` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`IP` varchar(16) NOT NULL,
+	`isBad` bool NOT NULL DEFAULT false,
+	`points` int NOT NULL DEFAULT 0,
+	`history` varchar(555),
+	PRIMARY KEY (`id`)
+);
 
---
--- Структура таблицы `ip`
---
+CREATE TABLE `user` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`login` varchar(500) NOT NULL,
+	`password` varchar(500) NOT NULL,
+	`K_min` int NOT NULL,
+	`N_sec` int NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-CREATE TABLE IF NOT EXISTS `ip` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `IP` varchar(16) NOT NULL,
-  `isBad` tinyint(1) NOT NULL DEFAULT '0',
-  `points` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+CREATE TABLE `city` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` varchar(500) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
--- --------------------------------------------------------
+CREATE TABLE `site_city` (
+	`id_Site` int NOT NULL,
+	`id_City` int NOT NULL
+);
 
---
--- Структура таблицы `region`
---
+CREATE TABLE `site` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` varchar(500) NOT NULL,
+	`id_User` int NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-CREATE TABLE IF NOT EXISTS `region` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+ALTER TABLE `click` ADD CONSTRAINT `click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `ip`(`id`);
 
--- --------------------------------------------------------
+ALTER TABLE `click` ADD CONSTRAINT `click_fk1` FOREIGN KEY (`id_Site`) REFERENCES `site`(`id`);
 
---
--- Структура таблицы `site`
---
+ALTER TABLE `site_city` ADD CONSTRAINT `site_city_fk0` FOREIGN KEY (`id_Site`) REFERENCES `site`(`id`);
 
-CREATE TABLE IF NOT EXISTS `site` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) NOT NULL,
-  `id_User` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `Site_fk0` (`id_User`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+ALTER TABLE `site_city` ADD CONSTRAINT `site_city_fk1` FOREIGN KEY (`id_City`) REFERENCES `city`(`id`);
 
--- --------------------------------------------------------
-
---
--- Структура таблицы `user`
---
-
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(500) NOT NULL,
-  `password` varchar(500) NOT NULL,
-  `K_min` int(11) NOT NULL,
-  `N_sec` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `user_region`
---
-
-CREATE TABLE IF NOT EXISTS `user_region` (
-  `id_User` int(11) NOT NULL,
-  `id_Region` int(11) NOT NULL,
-  KEY `User_Region_fk0` (`id_User`),
-  KEY `User_Region_fk1` (`id_Region`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Ограничения внешнего ключа сохраненных таблиц
---
-
---
--- Ограничения внешнего ключа таблицы `click`
---
-ALTER TABLE `click`
-  ADD CONSTRAINT `Click_fk1` FOREIGN KEY (`id_Site`) REFERENCES `site` (`id`),
-  ADD CONSTRAINT `Click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `ip` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `site`
---
-ALTER TABLE `site`
-  ADD CONSTRAINT `Site_fk0` FOREIGN KEY (`id_User`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `user_region`
---
-ALTER TABLE `user_region`
-  ADD CONSTRAINT `User_Region_fk1` FOREIGN KEY (`id_Region`) REFERENCES `region` (`id`),
-  ADD CONSTRAINT `User_Region_fk0` FOREIGN KEY (`id_User`) REFERENCES `user` (`id`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ALTER TABLE `site` ADD CONSTRAINT `site_fk0` FOREIGN KEY (`id_User`) REFERENCES `user`(`id`);

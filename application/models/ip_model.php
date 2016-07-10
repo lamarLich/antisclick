@@ -21,7 +21,20 @@ class Ip_model extends CI_Model
         }
         return $data[0]['points'];
     }
-    
+
+    function LoadHistory($ip)
+    {
+        $qGetQuery = "SELECT history FROM ip WHERE IP=?;";
+        $res       = $this->db->query($qGetQuery, array(
+            $ip
+        ));
+        $data      = $res->result_array();
+        if (count($data) == 0) {
+            return array();
+        }
+        return $data[0]['history'];
+    }
+
     function InsertPoints($ip, $points)
     {
         $data = array(
@@ -34,7 +47,16 @@ class Ip_model extends CI_Model
         $this->db->where('IP', $ip);
         $this->db->update('ip', $data);
     }
-    
+    function InsertHistory($ip, $history)
+    {
+        echo "<br>history= $history<br>";
+        $data = array(
+            'history' => $history
+        );
+        
+        $this->db->where('IP', $ip);
+        $this->db->update('ip', $data);
+    }
     
     
     function insert_ip($ip)
