@@ -28,22 +28,21 @@ $.ajax({
 
 	//привзяка регионов к сайту
 	$('.but').click(function() {
+
 		var site = $(this).attr('id');
 		var cityIds = new Array();
 		if ($('select#' + site + ' option:selected').val() == 0) {
 			return;
 		}
 		$('select#' + site + ' option:selected').each(function() {
-			if ($(this).val() == 0) {
-				
-				return;
-			}
+			
 			cityIds.push($(this).val());
 		});
 		var data = {
 			name: site,
 			cities: cityIds
 		};
+		
 		$.ajax({
 			type: 'POST',
 			url: '/panel/AddRegion',
