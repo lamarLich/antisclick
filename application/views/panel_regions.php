@@ -13,7 +13,7 @@ td {
     </thead>
     <tbody>
     <?php foreach ($sites as $site):?>
-    	<tr id='<?=$site['id'];?>'>
+    	<tr class="site-row" id='<?=$site['id'];?>'>
     		<td><?=$site['name'];?></td>
     		<td class="regions" id="<?=$site['id'];?>"></td>
     		<td><select id="<?=$site['id'];?>">

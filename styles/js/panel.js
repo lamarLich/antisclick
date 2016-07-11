@@ -10,29 +10,21 @@ $(document).ready(function(){
 			$('.'+checkedSite).css("display", "none");	
 	});
 
-	//выгрузка регионов
-	$('tr').each(function() {
-		var Id = $(this).attr('id');
-		//alert(id);
-		$.ajax({
+$('tr.site-row').each(function() {
+	var Id = $(this).attr('id');
+$.ajax({
 			type: 'GET',
 			url: '/panel/GetCitysFromSiteID',
 			data: {id: Id},
 			success: function(response) {
-				var result = jQuery.parseJSON( response );
-				for (r in response) {				
-					$('#' + Id + '.regions').append(response[r].name);
-				};
-				/*var arr = jQuery.parseJSON( response )
-				for(a in arr) {
-					$('#' + Id + '.regions').append(arr[a].name);
-				}*/		
+				var jsonObj = eval('(' + response + ')');	
+				for (var i = 0; i < jsonObj.length; i++) {					
+					var ii = i + 1;
+					$('#' + Id + '.regions').html( $('#' + Id + '.regions').html() + ' ' + jsonObj[i].name);	
+				};								
 			}
 		});
-	});
-
-
-
+});
 
 	//привзяка регионов к сайту
 	$('.but').click(function() {
