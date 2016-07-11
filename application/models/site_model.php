@@ -82,4 +82,8 @@ class Site_model extends CI_Model
             ));
         }
     }
+    function GetAllCities() {
+        $query = $this->db->get('city');
+        return $query->result_array();
+    }
 }

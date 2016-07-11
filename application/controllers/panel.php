@@ -33,10 +33,21 @@ class Panel extends CI_Controller {
 		$this->load->view('templates/header',$data);
 
 		$this->load->model('site_model'); // загрузка модели
-     	$data['sites'] = $this->site_model->GetAllSites();  
-		//////////////////////////  $this->load->view('panel_stat',$data);
+     	$data['sites'] = $this->site_model->GetAllSites(); 
+     	$data['cities'] = $this->site_model->GetAllCities();
+		$this->load->view('panel_regions',$data);
      	
 		$this->load->view('templates/footer');
+	}
+	public function GetCitysFromSiteID()
+	{
+		$this->load->model('site_model');
+		$arr = $this->site_model->GetCitysFromSiteID($_GET['id']);
+		echo json_encode($arr);
+		/*foreach ($arr as $val) {
+			echo $val['name'] . "&nbsp;";
+		}*/
+		exit;
 	}
 	public function AddRegion()
 	{

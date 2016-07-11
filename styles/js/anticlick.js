@@ -15,7 +15,7 @@ function $_GET(param) {
 function ImStillHere() {
     $.ajax({
         type: "POST",
-        url: "http://landofbrand.ru/checkIP/stillhere",
+        url: "/checkIP/stillhere",
         success: function(response) {
             //
         }
@@ -27,7 +27,7 @@ window.onload = function() {
 			var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "UTM_SOURCE=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
 			$.ajax({
 				type: "POST",
-				url: "http://landofbrand.ru/checkIP",
+				url: "/checkIP",
 				data: { 'json': data },
 				success: function(response) {
 					//alert(response);//
@@ -43,7 +43,8 @@ window.onunload = function() {
     //return '123';
     $.ajax({
         type: "POST",
-        url: "http://landofbrand.ru/checkIP/close",
+        //url: "http://landofbrand.ru/checkIP/close",
+        url: "/checkIP/close",
         success: function(response) {
             //return response;
         }

@@ -1,5 +1,4 @@
-
-# AntiClick
-A-Strategy
-All rights reserved
+# Антисклик
+А-стратегия
+олл райтс резервед
 
