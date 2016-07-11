@@ -24,7 +24,7 @@ function ImStillHere() {
 window.onload = function() {
     if ($_GET('utm_source') == 'google') {
 		if(navigator['userAgent'].indexOf('Googlebot') == -1){
-			var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "UTM_SOURCE=' + $_GET('utm_source') + '","country": "' + ymaps.geolocation.country + '"}';
+			var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "'+ymaps.geolocation.region+'","country": "' + ymaps.geolocation.country + '","utm":"'+ $_GET('utm_source') + '"}';
 			$.ajax({
 				type: "POST",
 				url: "/checkIP",
