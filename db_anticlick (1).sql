@@ -52,11 +52,17 @@ CREATE TABLE `site` (
 );
 
 ALTER TABLE `click` ADD CONSTRAINT `click_fk0` FOREIGN KEY (`id_IP`) REFERENCES `ip`(`id`);
-
 ALTER TABLE `click` ADD CONSTRAINT `click_fk1` FOREIGN KEY (`id_Site`) REFERENCES `site`(`id`);
-
 ALTER TABLE `site_city` ADD CONSTRAINT `site_city_fk0` FOREIGN KEY (`id_Site`) REFERENCES `site`(`id`);
-
 ALTER TABLE `site_city` ADD CONSTRAINT `site_city_fk1` FOREIGN KEY (`id_City`) REFERENCES `city`(`id`);
-
 ALTER TABLE `site` ADD CONSTRAINT `site_fk0` FOREIGN KEY (`id_User`) REFERENCES `user`(`id`);
+
+INSERT INTO `city`(`name`) VALUES ("Москва");
+INSERT INTO `city`(`name`) VALUES ("Санкт-Петербург");
+INSERT INTO `city`(`name`) VALUES ("Новосибирск");
+INSERT INTO `city`(`name`) VALUES ("Екатеринбург");
+INSERT INTO `city`(`name`) VALUES ("Омск");
+INSERT INTO `city`(`name`) VALUES ("Хабаровск");
+INSERT INTO `city`(`name`) VALUES ("Оренбург");
+INSERT INTO `city`(`name`) VALUES ("Якутск");
+INSERT INTO `city`(`name`) VALUES ("Жатай");
