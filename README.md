@@ -1,4 +1,4 @@
-# Антисклик
-А-стратегия
+# AntiClick
+A-Strategy
 
 
