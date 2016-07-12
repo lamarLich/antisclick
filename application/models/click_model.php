@@ -122,7 +122,7 @@ class Click_model extends CI_Model
     function AddTimeOutIteration()
     {
         $idClick = $this->session->userdata('id_Click');
-        if (!isset($idClick)) {
+        if (!isset($idClick)|| empty($idClick)) {
             return false;
         }
         $data = array(

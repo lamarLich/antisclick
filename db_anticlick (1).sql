@@ -66,3 +66,8 @@ INSERT INTO `city`(`name`) VALUES ("’абаровск");
 INSERT INTO `city`(`name`) VALUES ("ќренбург");
 INSERT INTO `city`(`name`) VALUES ("якутск");
 INSERT INTO `city`(`name`) VALUES ("∆атай");
+
+ALTER TABLE  `site_city` ADD UNIQUE (
+`id_Site` ,
+`id_City`
+);
