@@ -68,8 +68,8 @@ class Panel extends CI_Controller {
   		var_dump($arr);
 
 		$this->load->model('site_model'); // загрузка модели
-		$id_Site=$this->site_model->GetID_site($arr["name"]);
-     	$data['sites'] = $this->site_model->AddCities($id_Site, $arr["cities"]);  
+		//$id_Site=$this->site_model->GetID_site($arr["name"]);
+     	$data['sites'] = $this->site_model->AddCities($arr["name"], $arr["cities"]);  
      	echo "<br><br>all OK";
 	}
 }

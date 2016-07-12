@@ -66,7 +66,7 @@ class Site_model extends CI_Model
     function AddCities($id_Site, $arrCities)
     {
         foreach ($arrCities as $key => $value) {
-            $qGetQuery = "SELECT id FROM city WHERE name=?;";
+            /*$qGetQuery = "SELECT id FROM city WHERE name=?;";
             $res       = $this->db->query($qGetQuery, array(
                 $value
             ));
@@ -74,11 +74,11 @@ class Site_model extends CI_Model
             if (count($data) == 0) {
                 echo "<br>//////////////////<br> Don't know city: ".$value." <br>//////////////////<br>";
                 return;
-            }
+            }*/
             
             $this->db->insert('site_city', array(
                 'id_Site' => $id_Site,
-                'id_City' => $data[0]["id"]
+                'id_City' => $value
             ));
         }
     }
