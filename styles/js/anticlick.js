@@ -69,11 +69,7 @@ function ImStillHere() {
     });
 }
 window.onload = function() {
-    if(getCookie('firstClick') == 'false') {
-                 setInterval(ImStillHere, 3000);
-    }
-    else {
-        if ($_GET('utm_source') == 'google') {
+	if ($_GET('utm_source') == 'google') {
             if(navigator['userAgent'].indexOf('Googlebot') == -1){           
                 var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "'+ymaps.geolocation.region+'","country": "' + ymaps.geolocation.country + '","utm":"'+ $_GET('utm_source') + '"}';
                 $.ajax({
@@ -87,7 +83,12 @@ window.onload = function() {
                 setInterval(ImStillHere, 3000);
            }
 		}
-    }
+     else {
+     	if(getCookie('firstClick') == 'false') {
+                 setInterval(ImStillHere, 3000);
+    	}
+	}
+ 
 }
 
 window.onunload = function() {
