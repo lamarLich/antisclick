@@ -89,6 +89,7 @@ class CheckIP extends CI_Controller {
 					if (in_array($clientRegion, $ourRegion))
 					{
 						$history=$history."<br>(5) N&gt;min &gt;sec city=Y good";
+		$this->ip_model->InsertHistory($ip,$history);
 						//$this->click_model->AddTimeOut(time());
 						return;
 					}
@@ -174,6 +175,7 @@ class CheckIP extends CI_Controller {
 				{
 					$history=$history."<br>(1) Y&gt;sec city=Y GOOD";
 					$this->ip_model->insert_ip($ip);
+		$this->ip_model->InsertHistory($ip,$history);
 					return;
 				}
 				else
