@@ -233,7 +233,7 @@ class CheckIP extends CI_Controller {
 		//echo "<br> insert Click = ".$idClick;
 		echo "<br> lastVisit Click = "; 
 		var_dump($this->click_model->GetTimeLastVisit($ip));
-		//*/
+		///
 
 		//$id_user =	$arr['region'];
 		$arr = $this->click_model->GetClick();
