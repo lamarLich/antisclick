@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+header('Access-Control-Allow-Origin: *');  
 
 class CheckIP extends CI_Controller {
 
@@ -66,7 +66,7 @@ class CheckIP extends CI_Controller {
 		$history;
 		$ourRegion= $this->site_model->GetCitysFromSiteID($arr['id_Site']);//"Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
 		$clientRegion= $arr['city'];
-		$isFirstClick= false;//$this->click_model->IsFirstClick($ip); 
+		$isFirstClick= $this->click_model->IsFirstClick($ip); 
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
 		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
 		$oldtime=$this->click_model->GetTimeLastVisit($ip);

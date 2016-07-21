@@ -4,7 +4,7 @@ td {
 }
 </style>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<a href="http://landofbrand.ru/panel/regions">Выставить регионы</a>
+<a href="/panel/regions">Выставить регионы</a>
 	<h3>Выберите сайты:</h3>
     <?php foreach ($all_sites as $site):?>
     	<input type="checkbox" name='site-<?=$site['id'];?>'>  <?=$site['name'];?><br>
