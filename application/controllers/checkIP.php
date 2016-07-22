@@ -55,11 +55,15 @@ class CheckIP extends CI_Controller {
   		
 		$idIP=$this->ip_model->insert_ip($ip);
 		$arr['id_ip']=$idIP;
-		$idClick= $this->click_model->insert_click($arr);
-		if($this->click_model->IsFirstClick($ip) ==true)
+		$tmp=false;
+		if($this->click_model->IsFirstClick($ip) == -1)
 		{
+			$tmp=true;
+		}
+		$idClick= $this->click_model->insert_click($arr);
+		if ($tmp == true) {
 			return;
-		}	
+		}
 
 		$arr = $this->click_model->GetLastClickWhereIP($ip);
 		$points=0;

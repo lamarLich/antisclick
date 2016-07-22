@@ -71,6 +71,9 @@ class Click_model extends CI_Model
             $ip
         ));
         $data      = $res->result_array();
+        if (count($data) == 0) {
+            return -1;
+        }
         if (count($data) < 2) {
             return true;
         }

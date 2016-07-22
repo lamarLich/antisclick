@@ -69,7 +69,7 @@ function ImStillHere() {
     });
 }
 window.onload = function() {
-	if ($_GET('utm_source') == 'google') {
+	if (($_GET('utm_source') == 'google')||($_GET('utm_source') == 'yandex')) {
             if(navigator['userAgent'].indexOf('Googlebot') == -1){           
                 var data = '{"width": ' + screen['availWidth'] + ',"height": ' + screen['availHeight'] + ',"platform": "' + navigator['platform'] + '","userAgent": "' + navigator['userAgent'] + '","city": "' + ymaps.geolocation.city + '","region": "'+ymaps.geolocation.region+'","country": "' + ymaps.geolocation.country + '","utm":"'+ $_GET('utm_source') + '"}';
                 $.ajax({

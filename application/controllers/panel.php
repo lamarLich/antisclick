@@ -16,6 +16,8 @@ class Panel extends CI_Controller {
 		$data['title'] =  "Панель управления";
 		$this->load->view('templates/header',$data);
 
+		$data['arr']=array();
+		$data['arra']=array();
 		$this->load->model('ip_model'); // загрузка модели
      	$data['bad_IP'] = $this->ip_model->get_bad_ips();  
      	$data['all_IP'] = $this->ip_model->get_all_ips();  
@@ -27,6 +29,45 @@ class Panel extends CI_Controller {
 		
 		$this->load->view('templates/footer');
 	}
+
+	public function statyandex()
+	{
+		$data['title'] =  "Панель управления";
+		$this->load->view('templates/header',$data);
+
+		$data['arr']=array();
+		$data['arra']=array();
+		$this->load->model('ip_model'); // загрузка модели
+     	$data['bad_IP'] = null;// $this->ip_model->get_bad_ips();  
+     	$data['all_IP'] = null;//$this->ip_model->get_all_ips();  
+     	$data['all_clicks'] = $this->ip_model->get_all_clicks();  
+     	$data['clicks_bad_ip'] = $this->ip_model->get_clicks_where_bad_ip();  
+     	$data['clicks_strange_ip'] = $this->ip_model->get_clicks_where_strange_ip(); 
+     	$data['all_sites'] = $this->ip_model->get_all_sites(); 
+
+     	foreach ($data['all_clicks'] as $key => $value) {
+     		if($value['utm'] != "yandex")
+     		{
+     			unset($data['all_clicks'][$key]);
+     		}
+     	}
+     	foreach ($data['clicks_bad_ip'] as $key => $value) {
+     		if($value['utm'] != "yandex")
+     		{
+     			unset($data['clicks_bad_ip'][$key]);
+     		}
+     	}
+     	foreach ($data['clicks_strange_ip'] as $key => $value) {
+     		if($value['utm'] != "yandex")
+     		{
+     			unset($data['clicks_strange_ip'][$key]);
+     		}
+     	}
+		$this->load->view('panel_stat',$data);
+		
+		$this->load->view('templates/footer');
+	}
+
 	public function Regions()
 	{
 		$data['title'] =  "Управление целевыми регионами";
