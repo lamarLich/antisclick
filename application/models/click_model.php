@@ -64,20 +64,28 @@ class Click_model extends CI_Model
         return $data[0];
     }
     
-    function IsFirstClick($ip)
+    function IsFirstClick($ip, $sitename)
     {
-        $qGetQuery = "SELECT * FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.IP=?;";
+        $getIdSiteQuery="SELECT * FROM site where name = ?;";
+        $res       = $this->db->query($getIdSiteQuery, array(
+            $sitename
+        ));
+        $data      = $res->result_array();
+        $idSite=$data[0]['id'];
+
+        $qGetQuery = "SELECT * FROM click INNER JOIN ip ON click.`id_IP` = ip.id AND ip.IP = ? WHERE click.`id_Site` =?;";
         $res       = $this->db->query($qGetQuery, array(
-            $ip
+            $ip,
+            $idSite
         ));
         $data      = $res->result_array();
         if (count($data) == 0) {
             return -1;
         }
         if (count($data) < 2) {
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
     
     function GetTimeLastVisit($ip)

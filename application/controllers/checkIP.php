@@ -55,22 +55,28 @@ class CheckIP extends CI_Controller {
   		
 		$idIP=$this->ip_model->insert_ip($ip);
 		$arr['id_ip']=$idIP;
-		$tmp=false;
-		if($this->click_model->IsFirstClick($ip) == -1)
-		{
-			$tmp=true;
-		}
+		$isFirstClick= $this->click_model->IsFirstClick($ip);
+		$arr['platform'] = "IsFirstClick = $isFirstClick";
 		$idClick= $this->click_model->insert_click($arr);
-		if ($tmp == true) {
+
+		if($isFirstClick == -1)
+		{
 			return;
 		}
-
+		if($isFirstClick == 1)
+		{
+			$isFirstClick=true;
+		}
+		if($isFirstClick == 0)
+		{
+			$isFirstClick=false;
+		}
 		$arr = $this->click_model->GetLastClickWhereIP($ip);
+		$checkedId=$arr['id'];
 		$points=0;
 		$history;
 		$ourRegion= $this->site_model->GetCitysFromSiteID($arr['id_Site']);//"Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
 		$clientRegion= $arr['city'];
-		$isFirstClick= $this->click_model->IsFirstClick($ip); 
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
 		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
 		$oldtime=$this->click_model->GetTimeLastVisit($ip);
@@ -92,14 +98,14 @@ class CheckIP extends CI_Controller {
 				{
 					if (in_array($clientRegion, $ourRegion))
 					{
-						$history=$history."<br>(5) N&gt;min &gt;sec city=Y good";
+						$history=$history."<br>checkedId = $checkedId <br>(5) N&gt;min &gt;sec city=Y good";
 						//$this->click_model->AddTimeOut(time());
 						$this->ip_model->InsertHistory($ip,$history);
 						return;
 					}
 					else
 					{
-						$history=$history."<br>(6) N&gt;min &gt;sec city=N +1";
+						$history=$history."<br>checkedId = $checkedId <br>(6) N&gt;min &gt;sec city=N +1";
 						$points++;
 					}
 				}
@@ -107,12 +113,12 @@ class CheckIP extends CI_Controller {
 				{
 					if (in_array($clientRegion, $ourRegion))
 					{
-						$history=$history."<br>(7) N&gt;min &lt;sec city=Y +1";
+						$history=$history."<br>checkedId = $checkedId <br>(7) N&gt;min &lt;sec city=Y +1";
 						$points++;
 					}
 					else
 					{
-						$history=$history."<br>(8) N&gt;min &lt;sec city=N +2";
+						$history=$history."<br>checkedId = $checkedId <br>(8) N&gt;min &lt;sec city=N +2";
 						$points+=2;
 					}
 				}
@@ -125,12 +131,12 @@ class CheckIP extends CI_Controller {
 					{
 						if (in_array($clientRegion, $ourRegion))
 						{
-							$history=$history."<br>(9) N&lt;min &gt;sec UA=Y city=Y +3";
+							$history=$history."<br>checkedId = $checkedId <br>(9) N&lt;min &gt;sec UA=Y city=Y +3";
 							$points+=3;
 						}
 						else
 						{
-							$history=$history."<br>(10) N&lt;min &gt;sec UA=Y city=N BAD";
+							$history=$history."<br>checkedId = $checkedId <br>(10) N&lt;min &gt;sec UA=Y city=N BAD";
 							$points=999;
 						}
 					}
@@ -138,12 +144,12 @@ class CheckIP extends CI_Controller {
 					{
 						if (in_array($clientRegion, $ourRegion))
 						{
-							$history=$history."<br>(11) N&lt;min &gt;sec UA=N city=Y +1";
+							$history=$history."<br>checkedId = $checkedId <br>(11) N&lt;min &gt;sec UA=N city=Y +1";
 							$points++;
 						}
 						else
 						{
-							$history=$history."<br>(12) N&lt;min &gt;sec UA=N city=N +3";
+							$history=$history."<br>checkedId = $checkedId <br>(12) N&lt;min &gt;sec UA=N city=N +3";
 							$points+=3;
 						}
 					}
@@ -152,19 +158,19 @@ class CheckIP extends CI_Controller {
 				{
 					if ($this->click_model->IsBeUserAgent($userAgent))
 					{
-						$history=$history."<br>(13) N&lt;min &lt;sec UA=Y BAD";
+						$history=$history."<br>checkedId = $checkedId <br>(13) N&lt;min &lt;sec UA=Y BAD";
 						$points=999;						
 					}
 					else
 					{
 						if (in_array($clientRegion, $ourRegion))
 						{
-							$history=$history."<br>(14) N&lt;min &lt;sec UA=N city=Y +4";
+							$history=$history."<br>checkedId = $checkedId <br>(14) N&lt;min &lt;sec UA=N city=Y +4";
 							$points+=4;
 						}
 						else
 						{
-							$history=$history."<br>(15) N&lt;min &lt;sec UA=N city=N BAD";
+							$history=$history."<br>checkedId = $checkedId <br>(15) N&lt;min &lt;sec UA=N city=N BAD";
 							$points=999;
 						}
 					}
@@ -177,7 +183,7 @@ class CheckIP extends CI_Controller {
 			{
 				if (in_array($clientRegion, $ourRegion))
 				{
-					$history=$history."<br>(1) Y&gt;sec city=Y GOOD";
+					$history=$history."<br>checkedId = $checkedId <br>(1) Y&gt;sec city=Y GOOD";
 
 					$this->ip_model->insert_ip($ip);
 					$this->ip_model->InsertHistory($ip,$history);
@@ -185,7 +191,7 @@ class CheckIP extends CI_Controller {
 				}
 				else
 				{
-					$history=$history."<br>(2) Y&gt;sec city=N +1";
+					$history=$history."<br>checkedId = $checkedId <br>(2) Y&gt;sec city=N +1";
 					$points++;
 				}
 			}
@@ -193,12 +199,12 @@ class CheckIP extends CI_Controller {
 			{
 				if (in_array($clientRegion, $ourRegion))
 				{
-					$history=$history."<br>(3) Y&lt;sec city=Y +1";
+					$history=$history."<br>checkedId = $checkedId <br>(3) Y&lt;sec city=Y +1";
 					$points++;
 				}
 				else
 				{
-					$history=$history."<br>(4) Y&lt;sec city=N +2";
+					$history=$history."<br>checkedId = $checkedId <br>(4) Y&lt;sec city=N +2";
 					$points+=2;
 				}
 			}
