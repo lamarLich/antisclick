@@ -71,6 +71,9 @@ class Click_model extends CI_Model
             $sitename
         ));
         $data      = $res->result_array();
+        if (count($data) == 0) {
+            return -2;
+        }
         $idSite=$data[0]['id'];
 
         $qGetQuery = "SELECT * FROM click INNER JOIN ip ON click.`id_IP` = ip.id AND ip.IP = ? WHERE click.`id_Site` =?;";

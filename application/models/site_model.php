@@ -7,8 +7,10 @@ class Site_model extends CI_Model
     
     var $name;
     var $id_User;
+    var $K_min;
+    var $N_sec;
     
-    function insert_site($name, $idUser)
+    function insert_site($name, $idUser,$K_min,$N_sec)
     {
         $qGetQuery = "SELECT id FROM site WHERE name=?;";
         $res       = $this->db->query($qGetQuery, array(
@@ -22,11 +24,21 @@ class Site_model extends CI_Model
         
         $this->db->insert('site', array(
             'name' => $name,
-            'id_User' => $idUser
+            'id_User' => $idUser,
+            'K_min' => $K_min,
+            'N_sec' => $N_sec
         ));
         return $this->db->insert_id();
     }
 
+    function DeleteSite($idSite)
+    {
+        return $this->db->delete('site', array('id' => $idSite));
+    }
+    function DeleteSite_CitiesWhereIdSite($idSite)
+    {
+        return $this->db->delete('site_city', array('id_Site' => $idSite));
+    }
     function GetAllSites()
     {
         $query = $this->db->get('site');
@@ -85,5 +97,20 @@ class Site_model extends CI_Model
     function GetAllCities() {
         $query = $this->db->get('city');
         return $query->result_array();
+    }
+    function GetSitesWhereIdUser($IdUser)
+    {
+        $qGetQuery = "SELECT site.id, site.name, COUNT(ip.id) as count_badip "
+        ."FROM site "
+        ."INNER JOIN click ON click.id_Site = site.id "
+        ."INNER JOIN ip ON click.`id_IP`=ip.id  AND ip.isBad=true WHERE site.`id_User` = ?";
+        $res       = $this->db->query($qGetQuery, array(
+            $IdUser
+        ));
+        $data      = $res->result_array();
+        if (count($data) != 0) {
+            return $data;
+        } else
+            array();
     }
 }

@@ -30,6 +30,7 @@ class CheckIP extends CI_Controller {
 		$this->load->model('user_model'); // загрузка модели
 		$this->load->model('site_model'); // загрузка модели
 
+		$from;
   		if(isset($_SERVER['HTTP_REFERER']))
   		{
 			$from =$_SERVER['HTTP_REFERER'];
@@ -55,10 +56,13 @@ class CheckIP extends CI_Controller {
   		
 		$idIP=$this->ip_model->insert_ip($ip);
 		$arr['id_ip']=$idIP;
-		$isFirstClick= $this->click_model->IsFirstClick($ip);
-		$arr['platform'] = "IsFirstClick = $isFirstClick";
+		$isFirstClick= $this->click_model->IsFirstClick($ip,$from);
+		//$arr['platform'] = "IsFirstClick = $isFirstClick";
 		$idClick= $this->click_model->insert_click($arr);
 
+		if ($isFirstClick == -2) {
+			$arr['platform'] = "ERROR! idSite= -1 ".$arr['platform'];
+		}
 		if($isFirstClick == -1)
 		{
 			return;
