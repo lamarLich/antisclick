@@ -78,16 +78,6 @@ class Site_model extends CI_Model
     function AddCities($id_Site, $arrCities)
     {
         foreach ($arrCities as $key => $value) {
-            /*$qGetQuery = "SELECT id FROM city WHERE name=?;";
-            $res       = $this->db->query($qGetQuery, array(
-                $value
-            ));
-            $data      = $res->result_array();
-            if (count($data) == 0) {
-                echo "<br>//////////////////<br> Don't know city: ".$value." <br>//////////////////<br>";
-                return;
-            }*/
-            
             $this->db->insert('site_city', array(
                 'id_Site' => $id_Site,
                 'id_City' => $value
@@ -98,19 +88,93 @@ class Site_model extends CI_Model
         $query = $this->db->get('city');
         return $query->result_array();
     }
+    
     function GetSitesWhereIdUser($IdUser)
     {
-        $qGetQuery = "SELECT site.id, site.name, COUNT(ip.id) as count_badip "
+        $qGetQuery = "SELECT site.id, site.name,ip.isBad, ip.id as count_badip "
         ."FROM site "
         ."INNER JOIN click ON click.id_Site = site.id "
-        ."INNER JOIN ip ON click.`id_IP`=ip.id  AND ip.isBad=true WHERE site.`id_User` = ?";
+        ."INNER JOIN ip ON click.`id_IP`=ip.id  WHERE site.`id_User` = ?";
         $res       = $this->db->query($qGetQuery, array(
             $IdUser
         ));
         $data      = $res->result_array();
         if (count($data) != 0) {
-            return $data;
+            $result=array();
+            $id = $data[0]['id'];
+            $sitename=$data[0]['name'];
+            $i=0;
+            foreach ($data as $key => $row) {
+                if($row['name']!=$sitename)
+                {
+                    $result[] = array(
+                    'id'=>$id,
+                    'name'=>$sitename,
+                    'count_badip'=> $i
+                    );
+                    $sitename=$row['name'];
+                    $id = $row['id'];
+                    $i=0;
+                }
+                else{
+                    if ($row['isBad']==1) {
+                        $i++;
+                    }
+                }
+            }
+            $result[] = array(
+                    'id'=>$data[count($data)-1]['id'],
+                    'name'=>$data[count($data)-1]['name'],
+                    'count_badip'=> $i
+                    );
+            
+            return $result;
         } else
             array();
+    }
+
+    function GetAllIPWhereSite($idUser, $siteId)
+    {
+        $query = $this->db->get('user_ip');
+        $arr = $query->result_array();
+
+        $qGetQuery = "SELECT ip.id, ip.IP"
+        ." FROM ip"
+        ." INNER JOIN click ON click.`id_IP` = ip.id"
+        ." INNER JOIN site ON click.`id_Site` = site.id"
+        ." WHERE site.id= ?"
+        ." AND ip.isBad = TRUE;";
+        $res       = $this->db->query($qGetQuery, array(
+            $siteId
+        ));
+        $data      = $res->result_array();
+        if (count($data) != 0) {
+            foreach ($data as &$row) {
+                if (in_array($arr, array('id_ip'=> $row['id'], 'id_user' =>$idUser ))) {
+                   $row['flag']=true;
+                }
+            }
+            return $data;
+        }
+        else 
+            return array();
+    }
+    function AddUser_ip($idUser, $arrIP)
+    {
+        $query = $this->db->get('user_ip');
+        $data = $query->result_array();
+
+        foreach ($arrIP as $value) {
+            $isNew=true;
+            if (in_array($data, array('id_ip'=> $value, 'id_user' =>$idUser ))) {
+                   $isNew=false;
+            }
+            if ($isNew==true) {
+                $this->db->insert('user_ip', array(
+                'id_ip' => $idUser,
+                'id_user' => $value
+                ));
+            }
+        }
     }
 }

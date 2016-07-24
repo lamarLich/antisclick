@@ -36,12 +36,7 @@ class CheckIP extends CI_Controller {
 			$from =$_SERVER['HTTP_REFERER'];
 			$from = explode("/", $from)[2];
 			echo "<br>HTTP_REFERER = ".$from.";<br>";
-
-			$data['login']=			"test";
-			$data['password']=		"test";
-			$data['K_min']=			2;
-			$data['N_sec']=			20;
-			$idUser = $this->user_model->insert_user($data);
+			$idUser=1;
 			$arr['id_Site'] = $this->site_model->insert_site($from,$idUser);
   		}
   		else{

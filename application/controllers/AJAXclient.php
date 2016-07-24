@@ -9,15 +9,14 @@ class AJAXclient extends CI_Controller {
 		echo "<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">";
 		echo "<br>AJAXclient методы: ";
 		echo "<br>";
-		echo "<br>[getUserSitesStat(userId)] ";
+		echo "<br>[getUserSitesStat()] ";
 		echo "<br>метод принимает юзерайди, возвращает его сайты в виде айди, название, кол-во плохих айпи";
-		echo "<br>Параметр 'userId' передается в GET или POST";
 		echo "<br>Вернет json или ошибку";
 		echo "<br>";
 		echo "<br>[AddUserSite(json)]";
 		echo "<br>метод принимает юзерайди, сайтнейм, массив из айди регионов, N и K, и складывает это все в бд, причем K и N могут быть нулом";
 		echo "<br>Параметр 'json' передается в GET или POST";
-		echo "<br> json = (userId, sitename, regions[] [,K_min, N_sec])";
+		echo "<br> json = (sitename, regions[] [,K_min, N_sec])";
 		echo "<br>Вернет ничего или ошибку";
 		echo "<br>";
 		echo "<br>[DeleteUserSite(siteId)]";
@@ -31,25 +30,36 @@ class AJAXclient extends CI_Controller {
 		echo "<br> json = (siteId, regions[])";
 		echo "<br>return '1' if all OK";
 		echo "<br>";
+		echo "<br>[GetCitysFromSiteID(id)]";
+		echo "<br>Возвращает список регионов привязанных к выбранному сайту";
+		echo "<br>Параметр 'id' передается в GET";
+		echo "<br>Вернет json или ошибку";
+		echo "<br>";
+		echo "<br>[GetAllCitys()]";
+		echo "<br>Возвращает весь список доступных регионов";
+		echo "<br>Вернет json или ошибку";
+		echo "<br>";
+		echo "<br>[getStatSite(siteId)]";
+		echo "<br>Возвращает список забаненых ip с флагом просмотрен\непросмотрен по выбранному сайту";
+		echo "<br>Параметр 'siteId' передается в GET или POST";
+		echo "<br>Вернет json или ошибку";
+		echo "<br>";
+		echo "<br>[seeIP(json)]";
+		echo "<br>Записывает новые просмотренные ip в БД";
+		echo "<br>Параметр 'json' передается в GET или POST";
+		echo "<br> json = [id_ip]";
+		echo "<br>Вернет 1 или ошибку";
 		echo "</div>";
 		$this->load->view('templates/footer');
 	}
 
-	//метод принимает юзерайди, возвращает его сайты в виде айди, название, кол-во плохих айпи
 	public function getUserSitesStat()
 	{
-		$userId;
-		if (!isset($_GET['userId']) && !isset($_POST['userId'])) {
-			echo "error: empty userId";
-  			die;
+		$userId=1;//$this->session->userdata('userId');
+		if (!isset($userId)) {
+			echo "error: UnAuthorized User";
+			die;
 		}
-		if (isset($_POST['userId'])) {
-			$userId = $_POST['userId'];
-		}
-		elseif (isset($_GET['userId'])) {
-		 	$userId = $_GET['userId'];
-		}
-
 		$this->load->model('site_model'); // загрузка модели
 
 		$data = $this->site_model->GetSitesWhereIdUser($userId);
@@ -60,11 +70,13 @@ class AJAXclient extends CI_Controller {
 		exit;
 	}
 
-	/*//метод принимает сайт айди, возвращает строки, 
-	//которые пользователь должен видеть в стате по своим сайтам, я не помню какие там точно
-	public function getStat()
+	public function getStatSite()
 	{
-
+		$userId=1;//$this->session->userdata('userId');
+		if (!isset($userId)) {
+			echo "error: UnAuthorized User";
+			die;
+		}
 		$siteId;
 		if (!isset($_GET['siteId']) && !isset($_POST['siteId'])) {
 			echo "error: empty siteId";
@@ -79,17 +91,44 @@ class AJAXclient extends CI_Controller {
 		
 		$this->load->model('site_model'); // загрузка модели
 
-		//$data = $this->site_model->($siteId);
+		$data = $this->site_model->GetAllIPWhereSite($userId, $siteId);
 		if (!empty($data)) {
 			echo json_encode($data);
 		}
 		else echo "error: empty result";
 		exit;
 	}
-	*/
 
-	//метод принимает юзерайди, сайтнейм, массив из айди регионов, 
-	//N и K, и складывает это все в бд, причем K и N могут быть нулом
+	public function seeIP()
+	{
+		$json;
+
+		if (!isset($_GET['json']) && !isset($_POST['json'])) {
+			echo "error: empty json";
+  			die;
+		}
+		if (isset($_POST['json'])) {
+			$json = $_POST['json'];
+		}
+		elseif (isset($_GET['json'])) {
+		 	$json = $_GET['json'];
+		}
+		
+		$json = json_decode($json, true);
+
+		$userId=1;//$this->session->userdata('userId');
+		if (!isset($userId)) {
+			echo "error: UnAuthorized User";
+			die;
+		}
+
+		$this->load->model('site_model'); // загрузка модели
+
+
+		$this->site_model-> AddUser_ip($userId, $json);
+		echo 1;
+	}
+
 	public function AddUserSite()
 	{
 		$json;
@@ -107,9 +146,10 @@ class AJAXclient extends CI_Controller {
 		
 		$json = json_decode($json, true);
 
-		if (!isset($json['userId'])) {
-			echo "error: empty json[userId]";
-  			die;
+		$userId=1;//$this->session->userdata('userId');
+		if (!isset($userId)) {
+			echo "error: UnAuthorized User";
+			die;
 		}
 		if (!isset($json['sitename'])) {
 			echo "error: empty json[sitename]";
@@ -125,9 +165,6 @@ class AJAXclient extends CI_Controller {
 		if (isset($json['N_sec'])) {
 			$N_sec=$json['N_sec'];
 		}
-		$this->load->model('ip_model'); // загрузка модели
-		$this->load->model('click_model'); // загрузка модели
-		$this->load->model('user_model'); // загрузка модели
 		$this->load->model('site_model'); // загрузка модели
 
 
@@ -135,7 +172,6 @@ class AJAXclient extends CI_Controller {
 		$this->site_model->AddCities($idSite, $json['regions']);
 	}
 
-	//метод на делет сайта по сайтайди
 	public function DeleteUserSite()
 	{
 		$siteId;
@@ -159,7 +195,6 @@ class AJAXclient extends CI_Controller {
 		exit;
 	}
 
-	//метод на апдейт региoнов сайта по сайтайди
 	public function UpdateUserSiteRegions()
 	{
 		$json;
@@ -188,5 +223,20 @@ class AJAXclient extends CI_Controller {
 		$this->site_model->DeleteSite_CitiesWhereIdSite($json['siteId']);
 		$this->site_model->AddCities($json['siteId'], $json['regions']);
 		echo "1";
+	}
+
+	public function GetCitysFromSiteID()
+	{
+		$this->load->model('site_model');
+		$arr = $this->site_model->GetCitysFromSiteID($_GET['id']);
+		echo json_encode($arr);
+		exit;
+	}
+	public function GetAllCitys()
+	{
+		$this->load->model('site_model');
+		$arr = $this->site_model->GetAllCities();
+		echo json_encode($arr);
+		exit;
 	}
 }
