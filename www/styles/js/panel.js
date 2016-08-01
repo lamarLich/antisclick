@@ -4,17 +4,17 @@
         $(this).parent().children('.spoiler-body').collapse('toggle');
 
         var ip = $(this).html();
-
+        var innerHTML;
+        
         $.ajax({
 			type: 'GET',
 			url: '/panel/GetStatBadIP',
 			data: {ip: ip},
 			success: function(response) {
-				$(this).parent().children('.spoiler-body').html(response);
-				//alert(response);		
+				innerHTML = response;
 			}
 		});
-
+		$(this).parent().children('.spoiler-body').html(response);
 
         
     });
