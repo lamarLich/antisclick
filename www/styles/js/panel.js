@@ -14,7 +14,7 @@
 				innerHTML = response;
 			}
 		});
-		$(this).parent().children('.spoiler-body').html(response);
+		$(this).parent().children('.spoiler-body').html(innerHTML);
 
         
     });
