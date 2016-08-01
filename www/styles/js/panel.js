@@ -1,4 +1,26 @@
+
+    $(document).on('click', '.spoiler-btn', function (e) {
+        e.preventDefault();
+        $(this).parent().children('.spoiler-body').collapse('toggle');
+
+        var ip = $(this).html();
+
+        $.ajax({
+			type: 'GET',
+			url: '/panel/GetStatBadIP',
+			data: {ip: ip},
+			success: function(response) {
+				$(this).parent().children('.spoiler-body').html(response);
+				//alert(response);		
+			}
+		});
+
+
+        
+    });
+
 $(document).ready(function(){
+	
 	//выбор сайта для отбржени кликов по нему
 	$(":checkbox").click(function() {
 

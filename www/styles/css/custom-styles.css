@@ -112,3 +112,20 @@
     color: #bd5a35;
     text-decoration: underline;
 }
+
+.spoiler-btn {
+    display: block;
+    position: relative;
+    background-color: #f9fafa;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+
+}
+.simple-little-table {
+    width: 80% !important;
+}

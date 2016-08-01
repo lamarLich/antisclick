@@ -21,9 +21,10 @@ td {
 		$item=array_unique($item);
 			foreach($item as $value)
 			{
-				echo "<tr class='site site-$key'>";
-				echo "<td>$value</td>";
-				echo "</tr>";
+				echo "<tr class='site site-$key'> <td>";
+				echo "<div class='spoiler'><div class='spoiler-btn'>$value</div>";
+				echo "<div class='spoiler-body collapse'></div></div>";
+				echo "</td></tr>";
 			}
 		?> 	
 	<?php endforeach;?>	

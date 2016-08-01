@@ -14,6 +14,9 @@
     <script src="/styles/js/anticlick.js?<?php echo time(); ?>"></script>
     
 	<script src="/styles/js/panel.js?<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 
