@@ -4,12 +4,13 @@
         $(this).parent().children('.spoiler-body').collapse('toggle');
 
         var ip = $(this).html();
-        var innerHTML;
+        var innerHTML = '';
         
         $.ajax({
 			type: 'GET',
 			url: '/panel/GetStatBadIP',
 			data: {ip: ip},
+			async: false,
 			success: function(response) {
 				innerHTML = response;
 			}
