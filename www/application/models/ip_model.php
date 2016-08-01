@@ -69,9 +69,17 @@ class Ip_model extends CI_Model
         if (count($data) != 0) {
             return $data[0]['id'];
         }
-        $this->db->insert('ip', array(
-            'IP' => $ip
-        ));
+
+        $hostname= gethostbyaddr($ip);
+        $provider = file_put_contents("http://api.2ip.com.ua/provider.json?ip=".$ip);
+        $providerJSON = json_decode($json, true);
+        $provider= $providerJSON["name_ripe"];
+        $arr = array(
+            'IP' => $ip,
+            'provider'=> $provider,
+            'hostname'=> $hostname
+        );
+        $this->db->insert('ip', $arr);
         return $this->db->insert_id();
     }
     
@@ -149,5 +157,22 @@ class Ip_model extends CI_Model
 		return $SiteData;
 	}
 	
-
+    function getStatBadIP($ip)
+    {
+        ////////////// Выгрузить hostname, provider, points, history + bad_clicks
+        $qGetClick = "SELECT *,ip.hostname,ip.provider, click.id as id_Click FROM click INNER JOIN ip ON click.`id_IP`=ip.id AND ip.ip=?;";
+        $res       = $this->db->query($qGetClick,array($ip));
+        $data = $res->result_array();
+        if (count($data) == 0) {
+            return array();
+        }
+        foreach ($data as &$value) {
+            $sec = $value['time_out']-$value['time_in'];
+            $min =$sec/60;
+            $value['time_all']    =  (integer)$min.":".$sec%60;
+            $value['time_in']     = date('Y-m-d H:i:s', $value['time_in']);
+            $value['time_out']    = date('Y-m-d H:i:s', $value['time_out']);
+        }
+        return $data;
+    }
 }

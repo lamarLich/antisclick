@@ -113,4 +113,77 @@ class Panel extends CI_Controller {
      	$data['sites'] = $this->site_model->AddCities($arr["name"], $arr["cities"]);  
      	echo "<br><br>all OK";
 	}
+	public function GetStatBadIP()
+	{
+		$ip;
+
+		if (!isset($_GET['ip']) && !isset($_POST['ip'])) {
+			echo "error: empty ip";
+  			die;
+		}
+		if (isset($_POST['ip'])) {
+			$ip = $_POST['ip'];
+		}
+		elseif (isset($_GET['ip'])) {
+		 	$ip = $_GET['ip'];
+		}
+
+		$this->load->model('ip_model'); // загрузка модели
+		$data= $this->ip_model->getStatBadIP($ip);
+		if ($data[0]['hostname'] == null) {
+		 	$data[0]['hostname']= "Не известен";
+		} 
+		if ($data[0]['provider'] == null) {
+		 	$data[0]['provider']= "Не известен";
+		} 
+		echo "
+		<table class=\"simple-little-table\" cellspacing='0'>
+			<tr>
+				<td>hostname:</td>
+				<td>".$data[0]['hostname']."</td>
+				<td>Провайдер:</td>
+				<td>".$data[0]['provider']."</td>
+				<td>История:</td>
+				<td>".$data[0]['history']."</td>
+			</tr>
+			<tr>
+				<th>id</th>
+				<th>Город</th>
+				<th>Регион</th>
+				<th>points</th>
+				<th>время всего</th>
+				<th>дата входа</th>
+			</tr>";
+		foreach ($data as $value) {
+			echo "<tr>";
+				echo "<td>";
+				echo $value["id_Click"];
+				echo "</td>";
+
+				echo "<td>";
+				echo $value["city"];
+				echo "</td>";
+
+				echo "<td>";
+				echo $value["region"];
+				echo "</td>";
+
+				echo "<td>";
+				echo $value["points"];
+				echo "</td>";
+
+				echo "<td>";
+				echo $value["time_all"];
+				echo "</td>";
+
+				echo "<td>";
+				echo $value["time_in"];
+				echo "</td>";
+
+			echo "</tr>";
+		}
+		echo "</table>";
+		//echo json_encode($data);
+		/////////////// Выгрузить hostname,provider,points, history + bad_clicks
+	}
 }

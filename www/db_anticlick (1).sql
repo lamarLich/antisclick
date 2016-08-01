@@ -69,6 +69,8 @@ CREATE TABLE IF NOT EXISTS `ip` (
   `isBad` tinyint(1) NOT NULL DEFAULT '0',
   `points` int(11) NOT NULL DEFAULT '0',
   `history` varchar(555) DEFAULT NULL,
+  `hostname` varchar(500),
+  `provider` varchar(500),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=692 ;
 

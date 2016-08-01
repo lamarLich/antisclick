@@ -153,6 +153,9 @@ class Site_model extends CI_Model
                 if (in_array($arr, array('id_ip'=> $row['id'], 'id_user' =>$idUser ))) {
                    $row['flag']=true;
                 }
+                else{
+                    $row['flag']=false;
+                }
             }
             return $data;
         }
