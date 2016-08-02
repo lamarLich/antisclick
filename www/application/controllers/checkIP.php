@@ -30,17 +30,18 @@ class CheckIP extends CI_Controller {
 		$this->load->model('user_model'); // загрузка модели
 		$this->load->model('site_model'); // загрузка модели
 
-		$from;
+		$from="";
+		//$_SERVER['HTTP_REFERER']="//denwer.antisclick";
   		if(isset($_SERVER['HTTP_REFERER']))
   		{
 			$from =$_SERVER['HTTP_REFERER'];
 			$from = explode("/", $from)[2];
 			echo "<br>HTTP_REFERER = ".$from.";<br>";
 			$idUser=1;
-			$arr['id_Site'] = $this->site_model->insert_site($from,$idUser);
+			$arr['id_Site'] = $this->site_model->insert_site($from,$idUser,2,20);
   		}
   		else{
-  			echo "empty HTTP_REFERER";
+  			echo "<br>empty HTTP_REFERER";
   			die;
   		}
   		
@@ -75,7 +76,15 @@ class CheckIP extends CI_Controller {
 		$points=0;
 		$history;
 		$ourRegion= $this->site_model->GetCitysFromSiteID($arr['id_Site']);//"Омск";//"Омская область";  //$this->user_model->Get_Regions($id_user);// TEST /////////////////////////////////////////////////////
+		
 		$clientRegion= $arr['city'];
+		echo "<br>ourRegions=";
+		var_dump($ourRegion);
+		echo "<br>clientRegion= $clientRegion";
+		if (in_array($clientRegion, $ourRegion[0]))
+		{ 
+			echo "<br><br>Есть попадание в наш регион!<br><br>";
+		}
 		$K_min= 2;//$this->user_model->Get_K_min($id_user); // TEST /////////////////////////////////////////////////////
 		$N_sec= 20;//$this->user_model->Get_N_sec($id_user); // TEST /////////////////////////////////////////////////////
 		$oldtime=$this->click_model->GetTimeLastVisit($ip);
@@ -95,7 +104,7 @@ class CheckIP extends CI_Controller {
 			{
 				if($timeOnSiteInSec > $N_sec)
 				{
-					if (in_array($clientRegion, $ourRegion))
+					if (in_array($clientRegion, $ourRegion[0]))
 					{
 						$history=$history."<br>checkedId = $checkedId <br>(5) N&gt;min &gt;sec city=Y good";
 						//$this->click_model->AddTimeOut(time());
@@ -110,7 +119,7 @@ class CheckIP extends CI_Controller {
 				}
 				else
 				{
-					if (in_array($clientRegion, $ourRegion))
+					if (in_array($clientRegion, $ourRegion[0]))
 					{
 						$history=$history."<br>checkedId = $checkedId <br>(7) N&gt;min &lt;sec city=Y +1";
 						$points++;
@@ -128,7 +137,7 @@ class CheckIP extends CI_Controller {
 				{
 					if ($this->click_model->IsBeUserAgent($userAgent))
 					{
-						if (in_array($clientRegion, $ourRegion))
+						if (in_array($clientRegion, $ourRegion[0]))
 						{
 							$history=$history."<br>checkedId = $checkedId <br>(9) N&lt;min &gt;sec UA=Y city=Y +3";
 							$points+=3;
@@ -141,7 +150,7 @@ class CheckIP extends CI_Controller {
 					}
 					else
 					{
-						if (in_array($clientRegion, $ourRegion))
+						if (in_array($clientRegion, $ourRegion[0]))
 						{
 							$history=$history."<br>checkedId = $checkedId <br>(11) N&lt;min &gt;sec UA=N city=Y +1";
 							$points++;
@@ -162,7 +171,7 @@ class CheckIP extends CI_Controller {
 					}
 					else
 					{
-						if (in_array($clientRegion, $ourRegion))
+						if (in_array($clientRegion, $ourRegion[0]))
 						{
 							$history=$history."<br>checkedId = $checkedId <br>(14) N&lt;min &lt;sec UA=N city=Y +4";
 							$points+=4;
@@ -180,7 +189,7 @@ class CheckIP extends CI_Controller {
 		{
 			if($timeOnSiteInSec > $N_sec)
 			{
-				if (in_array($clientRegion, $ourRegion))
+				if (in_array($clientRegion, $ourRegion[0]))
 				{
 					$history=$history."<br>checkedId = $checkedId <br>(1) Y&gt;sec city=Y GOOD";
 
@@ -196,7 +205,7 @@ class CheckIP extends CI_Controller {
 			}
 			else
 			{
-				if (in_array($clientRegion, $ourRegion))
+				if (in_array($clientRegion, $ourRegion[0]))
 				{
 					$history=$history."<br>checkedId = $checkedId <br>(3) Y&lt;sec city=Y +1";
 					$points++;

@@ -11,7 +11,7 @@
     <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&amp;lang=ru-RU"></script>
     <script src="http://yastatic.net/jquery/2.1.1/jquery.min.js"></script>
     <!-- -->
-    <script src="/styles/js/anticlick.js?<?php echo time(); ?>"></script>
+    <script src="/styles/js/anticlick3.js?<?php echo time(); ?>"></script>
     
 	<script src="/styles/js/panel.js?<?php echo time(); ?>"></script>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">

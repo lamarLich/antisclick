@@ -71,7 +71,7 @@ class Ip_model extends CI_Model
         }
 
         $hostname= gethostbyaddr($ip);
-        $provider = file_put_contents("http://api.2ip.com.ua/provider.json?ip=".$ip);
+        $json = file_get_contents("http://api.2ip.com.ua/provider.json?ip=".$ip);
         $providerJSON = json_decode($json, true);
         $provider= $providerJSON["name_ripe"];
         $arr = array(
@@ -174,5 +174,89 @@ class Ip_model extends CI_Model
             $value['time_out']    = date('Y-m-d H:i:s', $value['time_out']);
         }
         return $data;
+    }
+
+// узнать провайдера и хостнэйм для всех ip (блочит api.2ip)
+    function LoadAllProvider()
+    {
+        $qGetQuery = "SELECT * FROM ip WHERE provider IS NULL;";
+        $res       = $this->db->query($qGetQuery);
+        $data      = $res->result_array();
+        if (count($data) == 0) {
+            return array("Все пусто");
+        }
+        echo "<br>всего ".count($data)."<br>";
+        $qUpdateQuery = "UPDATE ip SET provider=?, hostname=? WHERE id=?;";
+        foreach ($data as $row) {
+            $ip= $row['IP'];
+            $myCurl = curl_init();
+            curl_setopt_array($myCurl, array(
+                CURLOPT_URL => 'http://ip-whois.net/host_ip.php',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query(array("T1"=> $ip))
+            ));
+            $response = curl_exec($myCurl);
+            curl_close($myCurl);
+            $result = explode("<h2>", $response);
+            //var_dump($result);
+            $result = explode("</h2>", $result[1]);
+            $result = explode(":", $result[0]);
+            $hostname = substr($result[1],2);
+            echo "<br>http://api.2ip.com.ua/provider.json?ip=".$ip;
+            $json = file_get_contents("http://api.2ip.com.ua/provider.json?ip=".$ip);
+            $providerJSON = json_decode($json, true);
+            $provider= $providerJSON["name_ripe"];
+
+            $res       = $this->db->query($qUpdateQuery,array(
+                $provider, 
+                $hostname,
+                $row['id']
+                ));
+            $res->result_array();
+        }
+        $qGetQuery = "SELECT * FROM ip WHERE provider IS NULL;";
+        $res       = $this->db->query($qGetQuery);
+        if (count($data) == 0) {
+            return array("Все пусто");
+        }
+        else
+        {
+            return $data;
+        }
+
+    }
+
+// узнать провайдера и хостнэйм для 1 ip 
+    function LoadProviderForCurrentIP($ip)
+    {
+            $myCurl = curl_init();
+            curl_setopt_array($myCurl, array(
+                CURLOPT_URL => 'http://ip-whois.net/host_ip.php',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query(array("T1"=> $ip))
+            ));
+            $response = curl_exec($myCurl);
+            curl_close($myCurl);
+            $result = explode("<h2>", $response);
+            $result = explode("</h2>", $result[1]);
+            $result = explode(":", $result[0]);
+            $hostname = substr($result[1],2);
+            $json = file_get_contents("http://api.2ip.com.ua/provider.json?ip=".$ip);
+            $providerJSON = json_decode($json, true);
+            $provider= $providerJSON["name_ripe"];
+            if (!isset($provider) || empty($provider)) {
+                $provider="undefined";
+            }
+            $data = array(
+                "provider"=> $provider, 
+                "hostname"=>$hostname
+            );
+            
+            $this->db->where('IP', $ip);
+            $this->db->update('ip', $data);
+            return "ok";
+
     }
 }

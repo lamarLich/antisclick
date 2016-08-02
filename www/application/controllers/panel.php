@@ -186,4 +186,29 @@ class Panel extends CI_Controller {
 		//echo json_encode($data);
 		/////////////// Выгрузить hostname,provider,points, history + bad_clicks
 	}
+	public function LoadAllProvider()
+	{
+		$this->load->model('ip_model');
+     	$data = $this->ip_model->LoadAllProvider();  
+     	var_dump($data);
+	}
+
+	// узнать провайдера и хостнэйм для 1 ip 
+	public function LoadProviderForCurrentIP()
+	{
+		$ip;
+
+		if (!isset($_GET['ip']) && !isset($_POST['ip'])) {
+			echo "error: empty ip";
+  			die;
+		}
+		if (isset($_POST['ip'])) {
+			$ip = $_POST['ip'];
+		}
+		elseif (isset($_GET['ip'])) {
+		 	$ip = $_GET['ip'];
+		}
+		$this->load->model('ip_model');
+     	echo $this->ip_model->LoadProviderForCurrentIP($ip);  
+	}
 }
